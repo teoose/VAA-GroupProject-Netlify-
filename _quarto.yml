@@ -12,7 +12,7 @@ website:
     
     right:
       - text: "Home"
-        href: "home.html"
+        href: "index.html"
       - text: "Shiny App"
         href: ".html"
       - text: "User Guide"
