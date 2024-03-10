@@ -2,18 +2,55 @@ project:
   type: website
 
 website:
-  title: "VAA-GroupProject(Netlify)"
+  title: "Decoding Chaos"
+  page-navigation: true
+  back-to-top-navigation: true
   navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+    logo: "images/logo.png"
+    title: false
+    search: true
+    
+    right:
+      - text: "Home"
+        href: "home.html"
+      - text: "Shiny App"
+        href: ".html"
+      - text: "User Guide"
+        href: "UserGuide/UserGuide.html"
+      - text: "Project Proposal"
+        menu:
+        - text: "Project Proposal"
+          href: "ProjectProposal/ProjectProposal.html"
+        - text: "Project Proposal (revised)"
+          href: "ProjectProposal/ProjectProposal(revised).html"
+      - text: "Prototype"
+        menu: 
+        - text: "Project Meeting Minutes"
+          href: ""
+        - text: "Initial Exploratory Data Analysis"
+          href: ""
+        - text: "Geospatial Exploratory Data Analysis"
+          href: ""
+        - text: "Clustering & Outlier Analysis / Hot & Cold Zone Analysis"
+          href: ""
+        - text: "Confirmatory Data Analysis"
+          href: ""
+    
+  page-footer:
+    right: 
+      - text: "©2024!"
 
 format:
   html:
-    theme: cosmo
+    theme:
+      - flatly
+      - theme.scss
+    mermaid: 
+      theme: neutral
     css: styles.css
-    toc: true
-
+    grid:
+      sidebar-width: 100px
+      body-width: 1200px
+      margin-width: 200px
+      gutter-width: 2.0rem
 editor: visual
-

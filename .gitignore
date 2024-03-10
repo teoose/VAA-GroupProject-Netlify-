@@ -4,3 +4,10 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+/.quarto/
+data/
+images/
+styles.css
+theme.scss
+_extensions/
