@@ -66,19 +66,16 @@ flowchart TD
   P -.-> R(total fatalities)
   P -.-> S(political violence rate)
   P -.-> T(violence against civilian rate)
-  P -.-> U(territory exchange rate \n-non-state exchange)
-  P -.-> V(territory exchange rate \n-government regains territory)
   
-  
-  D --> W(country)
-  D --> X(longitude)
-  D --> Y(latitude)
-  D --> Z(admin1)
-  D --> AA(admin2)
-  D --> AB(admin3)
-  D -.-> AC(New Variables)
-  AC -.-> AD(geometry points)
-  AC -.-> AE(shapeID)
+  D --> U(country)
+  D --> V(longitude)
+  D --> W(latitude)
+  D --> X(admin1)
+  D --> Y(admin2)
+  D --> Z(admin3)
+  D -.-> AA(New Variables)
+  AA -.-> AB(geometry points)
+  AA -.-> AC(shapeID)
 ```
 
 # Methodology & Analytical Approach
