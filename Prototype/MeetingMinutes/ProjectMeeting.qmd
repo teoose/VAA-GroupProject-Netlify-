@@ -33,6 +33,6 @@ execute:
 
 **Absent:** Wong Ngai Munn Zachary Mark
 
-[**Click here to view meeting minutes - 1**](https://decoding-chaos.netlify.app/Prototype/MeetingMinutes/Meeting2.html)**.**
+[**Click here to view meeting minutes - 2**](https://decoding-chaos.netlify.app/Prototype/MeetingMinutes/Meeting2.html)**.**
 
 ------------------------------------------------------------------------

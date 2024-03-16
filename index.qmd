@@ -1,5 +1,5 @@
 ---
-title: "Decoding Chaos"
+title: ""
 toc: false
 sidebar: false
 title-block-style: none
