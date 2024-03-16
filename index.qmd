@@ -1,5 +1,48 @@
 ---
 title: "Decoding Chaos"
+toc: false
+sidebar: false
+title-block-style: none
+css: homepage.css
+listing:
+    id: sample-listings
+    contents: content/**/*.qmd
+    type: grid
+    sort: "number"
+    categories: true
+    #fields: [image, title, github, gitlab]
+    #template: cards.ejs
 ---
 
-Work in progress
+::: {#hero-banner .column-screen}
+::: {.grid .column-page}
+::: {.headline .g-col-lg-6 .g-col-12 .g-col-md-12}
+::: h1
+Working in progress
+:::
+
+::: h2
+
+:::
+
+```{=html}
+
+```
+<br>
+
+
+<br>
+:::
+
+::: {.g-col-lg-6 .g-col-12 .g-col-md-12}
+
+:::
+:::
+:::
+
+
+::: {#sample-listings}
+:::
+
+```{}
+```

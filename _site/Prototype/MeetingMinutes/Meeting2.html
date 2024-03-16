@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-03-10">
+
+<title>Decoding Chaos – meeting2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo.png" alt="" class="navbar-logo">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.html" rel="" target="">
+ <span class="menu-text">Shiny App</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../UserGuide/UserGuide.html" rel="" target="">
+ <span class="menu-text">User Guide</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-project-proposal" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Project Proposal</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-project-proposal">    
+        <li>
+    <a class="dropdown-item" href="../../ProjectProposal/ProjectProposal.html" rel="" target="">
+ <span class="dropdown-text">Project Proposal</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../ProjectProposal/ProjectProposal(revised).html" rel="" target="">
+ <span class="dropdown-text">Project Proposal (revised)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-prototype" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Prototype</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-prototype">    
+        <li>
+    <a class="dropdown-item" href="../../Prototype/MeetingMinutes/ProjectMeeting.html" rel="" target="">
+ <span class="dropdown-text">Project Meeting Records</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="isss608-group-5-meeting-minutes" class="level1">
+<h1>ISSS608 Group 5 Meeting Minutes</h1>
+<p><strong>Project Meeting 2:</strong> Project Netlify, R Shiny dashboard modules, Data preparation</p>
+<p><strong>Date:</strong> 09/03/2024</p>
+<p><strong>Time:</strong> 10.30am – 12.15pm</p>
+<p><strong>In Attendance:</strong> Imran Bin Mohd Ibrahim, Teo Suan Ern</p>
+<p><strong>Absent:</strong> Wong Ngai Munn Zachary Mark</p>
+<hr>
+<section id="agenda-items" class="level2">
+<h2 class="anchored" data-anchor-id="agenda-items">Agenda Items</h2>
+<ol type="1">
+<li><p>Finalise project topic</p></li>
+<li><p>Discussion on Netlify pages</p></li>
+<li><p>Updates on R Shiny dashboard modules</p>
+<ul>
+<li><p>Exploratory (Data Analysis &amp; Geospatial Data Analysis)</p></li>
+<li><p>Geospatial Analysis (“Cluster and Outlier Analysis” &amp; “Hot and Zone Spot Analysis”)</p></li>
+</ul></li>
+<li><p>Discussion on data preparation (included geospatial) 5. Any Other Matters/ Follow-up Action</p></li>
+</ol>
+<hr>
+</section>
+<section id="agenda-item-1-finalise-project-topic" class="level2">
+<h2 class="anchored" data-anchor-id="agenda-item-1-finalise-project-topic">Agenda Item 1: Finalise project topic</h2>
+<p>Following from the consultation with Prof Kam on 24 February 2024, the team has decided to follow Prof Kam’s advice to adopt the alternative dataset from ACLED and focus on Myanmar instead of Global Terrorism Database from University of Maryland. The ACLED dataset looks at armed conflict incidents as it has more potential.</p>
+<p>Given the changes in the project topic, Imran suggested that the team could have a revised version of the project proposal. Suan Ern agreed with Imran’s suggestion and will follow-up to work on revising the project proposal page (version 2).</p>
+<p>Each team member will take one of the main prototype modules as follows:</p>
+<p>• Exploratory Data Analysis (Initial &amp; Geospatial) – Suan Ern</p>
+<p>• “Cluster and Outlier Analysis” &amp; “Hot and Zone Spot Analysis” – Imran</p>
+<p>• Confirmatory Data Analysis – Zachary</p>
+<hr>
+</section>
+<section id="agenda-item-2-discussion-on-netlify-pages" class="level2">
+<h2 class="anchored" data-anchor-id="agenda-item-2-discussion-on-netlify-pages">Agenda Item 2: Discussion on Netlify pages</h2>
+<section id="discussion-on-main-and-prototype-page" class="level3">
+<h3 class="anchored" data-anchor-id="discussion-on-main-and-prototype-page">Discussion on Main and Prototype page</h3>
+<p>Suan Ern suggested that the team should consider working on the Shiny application and Netlify (Quarto) pages concurrently. Imran thought that it would be good as certain information (pages) could be easily populated (such as Prototype page can be derived from individual members’ take-home exercise 4 and segments from project proposal could be used to fill some of the content on the main page).</p>
+<p>Imran agreed to be the main POC for Shiny application (in terms of combining all modules done by all team members) while Suan Ern will follow-up to work on incorporating the few Netlify pages discussed.</p>
+<hr>
+</section>
+</section>
+<section id="agenda-item-3-updates-on-r-shiny-dashboard-modules" class="level2">
+<h2 class="anchored" data-anchor-id="agenda-item-3-updates-on-r-shiny-dashboard-modules">Agenda Item 3: Updates on R Shiny dashboard modules</h2>
+<section id="discussion-on-exploratory" class="level3">
+<h3 class="anchored" data-anchor-id="discussion-on-exploratory">[3-1] Discussion on Exploratory</h3>
+<p>Suan Ern updated on the Exploratory tab in Shiny application. She mentioned that she has saved the cleaned dataset after her data preparation in .rds format for Shiny application.</p>
+</section>
+<section id="o-overview" class="level3">
+<h3 class="anchored" data-anchor-id="o-overview">o Overview</h3>
+<p>Suan Ern shared that the subtab would serve as the “landing page” that will display an overview of Myanmar map with its spatial points of armed conflicts over the years (i.e.&nbsp;2010 to 2023). She added that the spatial points are categorised into different colours by event type category.</p>
+<p>Imran agreed that the landing page can be an overview of a Myanmar map and suggested to have a datatable as well. Suan Ern highlighted her concerns in terms of the loading speed of main Shiny page. The team agreed that they would reconsider the layout again after incorporating all Shiny modules for the project and determine the capacity load.</p>
+</section>
+<section id="o-geospatial-exploration" class="level3">
+<h3 class="anchored" data-anchor-id="o-geospatial-exploration">o Geospatial exploration</h3>
+<p>Suan Ern showed the two geospatial exploration maps (i.e.&nbsp;statistical distribution and spatial distribution) under the Geospatial exploration tab. She shared that the different choropleth maps have different display variables and allow users to perform spatial exploration to conceptualise armed conflict spaces in Myanmar using its own filtering parameters. Suan Ern explained that the boxmap is a spatial representation that is like boxplot and histogram, which is useful to detect outliers and visualise distribution of variables.</p>
+<p>Imran suggested to label the filtering parameters according to the different maps to provide greater clarity to users. Suan Ern explained that she has included a text liner to describe the filter options’ applicability to the specific map.</p>
+</section>
+<section id="o-trends" class="level3">
+<h3 class="anchored" data-anchor-id="o-trends">o Trends</h3>
+<p>Suan Ern explained that the tab will perform time series analysis to identify trends, or cyclic patterns, spot anomalies, visualise distribution of armed conflict incidents/ fatalities and how it has changed over the years using either line chart or calendar heatmap. She shared that she has separated the two charts in different rows (with collapsible feature) to allow users to hide the line chart if users are only keen to display calendar heatmap.</p>
+</section>
+<section id="o-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="o-distribution">o Distribution</h3>
+<p>For the distribution tab, Suan Ern shared that it would provide users with data exploration tools to explore the distribution of armed conflict incidents that resulted in fatalities and the dispersion of such incidents across the years in Myanmar. However, she highlighted her concerns in terms of the speed of loading the two charts. She has included a page loading animation indicator bar on all her charts so as to ‘inform’ users that the charts are loading instead of a blank page.</p>
+<p>Imran mentioned that it is a good idea to have the page loading animation indicator bar as our project dataset is large.</p>
+</section>
+<section id="o-network-relationships" class="level3">
+<h3 class="anchored" data-anchor-id="o-network-relationships">o Network relationships</h3>
+<p>For the network relationships tab, Suan Ern presented the network graph that would allow users to explore on the network association amongst the top actors (with more than 300 interactions with the other actors in each year) involved in the armed conflict incidents in Myanmar.</p>
+</section>
+<section id="o-incident-summary" class="level3">
+<h3 class="anchored" data-anchor-id="o-incident-summary">o Incident Summary</h3>
+<p>Suan Ern presented the final tab that she has created, which would visualise large volume of armed conflict incident summary notes that captures keywords recorded in a word cloud. This would be useful to spot changes over time where users do not have to read through all incident summary notes. The tab will also include a data table of the entire dataset.</p>
+<p>Imran shared that he has also considered similar concept of having a plot and the data table next to it (which he would share further in his Shiny application).</p>
+</section>
+<section id="discussion-on-geospatial-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="discussion-on-geospatial-analysis">[3-2] Discussion on Geospatial Analysis</h3>
+<p>Imran mentioned that he has saved the cleaned dataset after his data preparation in .csv format for Shiny application. Imran explained that his prototype has two main tabs (‘cluster and outlier analysis’ &amp; ‘Hot and cold zone analysis’). For ‘cluster and outlier analysis’ tab, he has further split them into three different sub-tabs to cover the different forms of geospatial analysis.</p>
+</section>
+<section id="o-cluster-and-outlier-analysis-first-sub-tab" class="level3">
+<h3 class="anchored" data-anchor-id="o-cluster-and-outlier-analysis-first-sub-tab">o Cluster and Outlier Analysis – first sub-tab</h3>
+<p>Imran presented the first tab with a proportional symbol map and a choropleth map that he has created to provide users with a visual introduction of the state of armed conflict incidents in Myanmar. On the functionality and interactivity components, Imran added that the Proportional Symbol Map would allow users to select the specific year and event type, where users will be able to see where conflicts events have happened in the country across. Furthermore, the size of the symbols will correspond to the number of fatalities.</p>
+<p>The choropleth map visualises the “intensity” of event types through use of color gradient. Instead of implementing a global filter to filter and affect both plots, Imran explained that he has chosen to apply separate filter selections for each plot to enable users to explore different data independently.</p>
+<p>Suan Ern realised the similarities of the two maps on exploratory tab - overview and geospatial exploration sub-tab pages, and clarified with Imran on the filter components for choropleth maps. She highlighted that the choropleth maps may use different filter options (such as adjusting the different ‘kernel’ options).</p>
+<p>Imran explained that his choropleth map used frequency counts while Suan Ern’s spatial distribution map used frequency rate, he suggested to implement the best practice of each team member when he consolidates the Shiny codes to ensure that each map serves its unique purpose.</p>
+</section>
+<section id="o-cluster-and-outlier-analysis-second-sub-tab" class="level3">
+<h3 class="anchored" data-anchor-id="o-cluster-and-outlier-analysis-second-sub-tab">o Cluster and outlier analysis – second sub-tab</h3>
+<p>Imran shared that this tab has two choropleth maps rendering the Local Moran’s I statistics and its corresponding p-values as well as a data table of the statistics. He went on to explain that users will be able to select the year and the event type once. Both maps, along with the data table will be updated upon user selection.</p>
+</section>
+<section id="o-cluster-and-outlier-analysis-third-sub-tab" class="level3">
+<h3 class="anchored" data-anchor-id="o-cluster-and-outlier-analysis-third-sub-tab">o Cluster and outlier analysis – third sub-tab</h3>
+<p>Imran shared that this would provide users with a visualisation of statistically significant clusters via the LISA Maps which would help users understand how clusters of event types may have developed and/or changed over time by adjusting the filters options.</p>
+<p>He further added that the Moran scatterplot enables users to see the statistically significant region names, by means of the quadrants and the annotations, whereas, Lisa Cluster map shows the specific parts of the country which are categorised as statistically significant or insignificant.</p>
+<p>Suan Ern clarified the filters options below Local Moran’s I Statistic, but there was none for Local Moran’s I P values map. Imran explained that he intended to have a global filter that would update both maps as well as the data table.</p>
+</section>
+<section id="o-hot-and-cold-zone-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="o-hot-and-cold-zone-analysis">o Hot and cold zone analysis</h3>
+<p>Imran shared that this module provides users with a visualisation of statistically significant areas of event types, using the Getis and Ord’s G statistics in order to help users understand how hot and cold zones may have developed and/or changed over time.</p>
+<p>Both the map and the data table will be updated upon user selection of year and event type. For the choropleth map, users will be able to select the specific year, event type, the data classification method and the number of clusters for the adaptive weight matrix. In addition, a data table that shows the statistics being rendered in the map can serve as a reference to users for the results filtered from user selection.</p>
+</section>
+<section id="discussion-on-shiny-template" class="level3">
+<h3 class="anchored" data-anchor-id="discussion-on-shiny-template">[3-3] Discussion on Shiny template</h3>
+<p>Suan Ern shared that she managed to figure out customising the colour themes in Shiny and has adjusted the colours for navigation bar (a darker tone colour of red) and side bar (light grey and hover-over to match the overall navigation bar colour). She also shared that she has tried to standardise the filter box colour to a different colour from the main box panel for plots to allow users to easily differentiate the different layout features. Suan Ern further added that she also tried to standardised her layout to either the extreme left or right panels for a consistency look and user as part of user experience. Imran mentioned that for consistency of the dashboard, it would be good to standardise the format and would use Suan Ern’s format when incorporating his prototype’s filter components.</p>
+<p>Imran raised his concerns in compiling the R Shiny application code for the team, as careful consideration is needed to consider which plots should be grouped together on the same tab/page. He further added that his R Shiny application code’s reactive statements grew in length and complexity, and errors were hard to isolate and easily propagated to other functions and outputs. Imran shared that he has adopted a modular approach (unique UI-Server code pairing) and allowed him to have easier trouble shooting (isolate errors per individual plot’s code chunk). Suan Ern agreed and mentioned that she also did the same and grouped the codes in the same ‘module’ by utilitising comment line.</p>
+</section>
+<section id="discussion-on-data-preparation-included-geospatial" class="level3">
+<h3 class="anchored" data-anchor-id="discussion-on-data-preparation-included-geospatial">[3-4] Discussion on data preparation (included geospatial)</h3>
+</section>
+<section id="discussion-on-data-preparation-and-new-variables-created" class="level3">
+<h3 class="anchored" data-anchor-id="discussion-on-data-preparation-and-new-variables-created">1. Discussion on data preparation and new variables created</h3>
+<p>Suan Ern explained that she has done two different data preparation, (1) data preparation for non-geospatial related plots and (2) data preparation for geospatial plots.</p>
+<p>For (1), Suan Ern shared that she has tried to check the data structure of the dataset and found that the event date variable was in character format. Hence, she has converted that variable to string format. She has also tried to create some variables based on total armed conflict incidents and total fatalities (by disorder type and sub event type), such as annual percentage of political violence/ annual percentage of violence against civilian and extracted day/ month from the event date variable, for subsequent data exploration.</p>
+</section>
+<section id="discussion-on-geospatial-data-preparation-geospatial-boundary" class="level3">
+<h3 class="anchored" data-anchor-id="discussion-on-geospatial-data-preparation-geospatial-boundary">2. Discussion on geospatial data preparation/ geospatial boundary</h3>
+<p>Imran shared his data preparation from his take-home exercise 4, where he tried to use admin 1 (region/state) and admin 2 (districts) levels. However, for most of his plots, he mentioned that he was using admin 2 levels.</p>
+<p>Imran used the shape files from the Myanmmar Information Management Unit (MIMU) website, as he found that GADM and GeoBoundaries have their limitations in terms of the administrative region information and map levels, where he tried to check for unique district names from the shape files (admin level 2) by identifying discrepancies and re-named some administrative areas (such as from Yangon-East changed to Yangon (East)) to synchronise with the downloaded shape files from MIMU.</p>
+<p>For geospatial data preparation, Suan Ern explained that she used the cleaned dataset that she extracted from data preparation segment. She explained that she downloaded all three levels of Myanmar administrative boundaries from geoBoundaries but only used Myanmar Level-2 Administrative Boundary in the subsequent geospatial exploration where she used EPSG:4979 - WGS 84 Geographic Coordinate system and EPSG:4144 - Myanmar Projected Coordinate System.</p>
+<p>Imran highlighted that given that each member did different geospatial data preparation methods, he suggested to look into it and would update the team on the final dataset for Shiny application.</p>
+</section>
+</section>
+<section id="agenda-item-4-any-other-matters-follow-up-action" class="level2">
+<h2 class="anchored" data-anchor-id="agenda-item-4-any-other-matters-follow-up-action">Agenda Item 4: Any Other Matters/ Follow-up Action</h2>
+<p>With no other matters, the meeting ended at 12:15pm.</p>
+<p><strong>Follow-up Actions:</strong></p>
+<ul>
+<li><p>The team updated Zachary via Telegram group chat on the team’s meeting and progress. o Suan Ern will prepare the draft minutes of meeting and update the team for inputs.</p></li>
+<li><p>The team agreed to meet every week for the subsequent weeks (every Saturday, 10.30am) till project submission.</p></li>
+<li><p>The team agreed on the follow-up actions for the next meeting:</p>
+<ul>
+<li><p>Zachary</p>
+<ul>
+<li>Complete confirmatory analysis Shiny prototype</li>
+</ul></li>
+<li><p>Imran</p>
+<ul>
+<li><p>Test and implement interactivity portion for static plots in his Shiny prototype</p></li>
+<li><p>Merge team members Shiny prototypes</p></li>
+</ul></li>
+<li><p>Suan Ern</p>
+<ul>
+<li><p>Test and link filters components in her Shiny prototype</p></li>
+<li><p>Revise project proposal (with ACLED dataset)</p></li>
+<li><p>Combine team members Quarto documents as Prototype page in Netlify.</p></li>
+</ul></li>
+</ul></li>
+</ul>
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+ ©2024!
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

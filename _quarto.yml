@@ -25,16 +25,8 @@ website:
           href: "ProjectProposal/ProjectProposal(revised).html"
       - text: "Prototype"
         menu: 
-        - text: "Project Meeting Minutes"
-          href: ""
-        - text: "Initial Exploratory Data Analysis"
-          href: ""
-        - text: "Geospatial Exploratory Data Analysis"
-          href: ""
-        - text: "Clustering & Outlier Analysis / Hot & Cold Zone Analysis"
-          href: ""
-        - text: "Confirmatory Data Analysis"
-          href: ""
+        - text: "Project Meeting Records"
+          href: "Prototype/MeetingMinutes/ProjectMeeting.html"
     
   page-footer:
     right: 
