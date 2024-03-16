@@ -77,7 +77,7 @@ The group decided on the following broad steps in terms of methodology:
 
 ·        Model Diagnostic: checking normality assumption
 
-Oneway ANOVA Test: ggbetweenstats() method
+·        Oneway ANOVA Test: ggbetweenstats() method
 
 ------------------------------------------------------------------------
 
