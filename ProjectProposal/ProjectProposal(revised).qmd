@@ -88,7 +88,7 @@ For this project, the following approach will be taken by the team:
 
     a.  Distribution Analysis
 
-    b.  Time-series Analysis
+    b.  Trend Analysis
 
     c.  Text Analysis
 
@@ -124,7 +124,7 @@ The team has decided to split the main prototype modules as follows:
 
 -   Confirmatory Data Analysis
 
-The team has conceptualised and developed a prototype to visually display the layouts of the R Shiny Application along with its UI and Server components. Please refer to **Decoding Chaos Prototype** for more.
+The team has conceptualised and developed a prototype to visually display the layouts of the R Shiny Application along with its UI and Server components. Please refer to **Decoding Chaos Prototype tab** for more.
 
 # R Packages
 
