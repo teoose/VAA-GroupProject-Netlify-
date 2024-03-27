@@ -1,0 +1,1266 @@
+---
+title: "Aspatial Analysis"
+subtitle: ""
+date: "18 March 2024"
+date-modified: "last-modified"
+author: "Teo Suan Ern"
+execute: 
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+  editor: visual
+---
+# 1. Overview
+
+In section will cover Aspatial Analysis module of the R Shiny Application. 
+
+# 2. Initial Data Preparation
+
+------------------------------------------------------------------------
+
+## 2.1 Install and launch R packages
+
+The project uses `p_load()` of pacman package to check if the R packages are installed in the computer.
+
+The following code chunk is used to install and launch the R packages.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+pacman::p_load(tidyverse, kableExtra, knitr, scales, 
+               ggthemes, RColorBrewer, lubridate, tm, plotly, tidygraph,
+               ggridges, ggdist, ggpubr
+               )
+```
+
+::: {.callout-warning icon="false" collapse="true"}
+### R packages installed
+
+-   *tidyverse*: a family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.
+
+-   *knitr*: an report generation tool.
+
+-   *ggthemes*: an R package that provides extra themes, geoms and scales to ggplot2 package.
+
+-   *DT*: an R interface to the JavaScript library DataTables that create interactive table on html page.
+
+-   *plotly*: an R package for creating interactive charts.
+
+-   *scales*: an scale package used for controlling axis and legend labels.
+
+-   *lubridate*: an R package that facilitates to use of dates and time elements.
+
+-   *wordcloud*: a text mining package and word cloud generator.
+
+-   *tidytext*: an R package that provides functions and supports seamless conversions of text to and from tidy formats of datasets.
+
+-   *tm*: an R package that provides text mining applications.
+
+-   *ggforce*: an extension of ggplot2 to provide visual data analysis with newer stats and geoms.
+:::
+
+## 2.2 Import Data
+
+The project will examine the dataset from [Armed Conflict Location & Event Data Project (ACLED)](https://acleddata.com/data-export-tool/){target="_blank"}, specifically Myanmar country, between Year 2010 and Year 2023.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code"
+
+data <- read.csv("data/1900-01-01-2024-02-26-Southeast_Asia-Myanmar.csv")
+```
+
+## 2.3 Overview of the data
+
+The dataset consists of 55,574 observations and 35 variables. Each row details the armed conflict event on the type, agents, location, date and other characteristics of conflict events (such as political violence, demonstration) in Myanmar.
+
+### Dataset Structure
+
+#### Use `str()` to check the structure of the data.
+
+```{r}
+str(data)
+```
+
+The output above reveals that event_date is in character format instead of date format.
+
+#### Use `colSums` to check for missing values
+
+The output below shows that there are four variables with missing values.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+# check missing values
+missing_values <- colSums(is.na(data)) 
+
+missing_values_only <- missing_values[missing_values > 0]
+
+missing_values_only %>% kable() 
+```
+
+#### Use `duplicate()` to check for duplicates:
+
+There are no duplicate entries in the dataset.
+
+```{r}
+data[duplicated(data),]
+```
+
+# 3. Data Wrangling
+
+------------------------------------------------------------------------
+
+The flowchart diagram below provides an overview of the key variables used in this project.
+
+```{mermaid}
+%%| echo: false
+flowchart TD
+  A(Key Variables Used \n event_id_cnty)
+  A --> B(Time Period)
+  A --> C(Characteristic of Incident)
+  A --> D(Location)
+  
+  B --> E(year)
+  B --> F(date)
+  B -.-> G(New Variables)
+  G -.-> H(day)
+  G -.-> I(week number)
+  G -.-> J(month)
+
+
+  C --> K(event_type)
+  C --> L(sub_event_type)
+  C --> M(actor1)
+  C --> N(actor2)
+  C --> O(fatalities)
+  C -.-> P(New Variables)
+  P -.-> Q(total incidents)
+  P -.-> R(total fatalities)
+  P -.-> S(political violence rate)
+  P -.-> T(violence against civilian rate)
+  
+  
+  D --> U(country)
+  D --> V(longitude)
+  D --> W(latitude)
+  D --> X(admin1)
+  D --> Y(admin2)
+  D --> Z(admin3)
+  D -.-> AA(New Variables)
+  AA -.-> AB(geometry points)
+  AA -.-> AC(shapeID)
+```
+
+## 3.1 Convert event_date format
+
+The code chunk below uses `dmy()` to convert the date format from character to date format:
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+data$event_date <- dmy(data$event_date)
+```
+
+## 3.2 Create new variables (administrative level 2)
+
+The code chunk below creates the following new variables based on total armed conflict incidents and total fatalities (by *disorder_type* and *sub_event_type*):
+
+-   Annual percentage of political violence
+
+-   Annual percentage of violence against civilian
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+data2 <- data %>%
+  group_by(year, admin2) %>%
+  filter(year != 2024) %>%
+  mutate(
+    total_fata = sum(fatalities),
+    
+    total_inci = n(),
+    
+    ## incidents
+    # Political violence
+    political_count = round(
+      sum(total_inci[event_type %in% c("Battles", "Protests", 
+                                       "Explosions/Remote violence", 
+                                       "Violence against civilians")]) /
+        sum(total_inci)),
+    
+    # Violence against civilian rates
+    civilian_count = round(
+      sum(total_inci[event_type == "Violence against civilians"]) / 
+        sum(total_inci)),
+    
+    # Exchange of territory
+    non_state_exchange = round(
+      sum(total_inci[sub_event_type == "Non-state actor overtakes territory"]) /
+        sum(total_inci)),
+      
+    govt_regain_exchange = round(
+      sum(total_inci[sub_event_type == "Government regains territory"]) / 
+        sum(total_inci)),
+    
+    
+    ## fatalities
+    # Political violence
+    political_count = round(
+      sum(total_fata[event_type %in% c("Battles", "Protests", 
+                                       "Explosions/Remote violence", 
+                                       "Violence against civilians")]) /
+        sum(total_fata)),
+    
+    # Violence against civilian
+    civilian_count = round(
+      sum(total_fata[event_type == "Violence against civilians"]) / 
+        sum(total_fata))
+    
+  ) %>%
+  ungroup()
+
+```
+
+## 3.3 Filter data columns
+
+The code chunk below selects/ excludes the variables intended to be used for this project. Cleaned dataset is named as final.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+final <- data2 %>%
+  select(-total_inci, -total_fata, -time_precision, -geo_precision,
+         -source_scale, -timestamp, -tags,
+         -population_1km, -population_2km, -population_5km, -population_best)
+```
+
+The code chunk below save the cleaned dataset in .rds format for subsequent geospatial EDA and R Shiny Application.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+write_rds(final, 
+          "data/final.rds")
+```
+
+Use `str()` to check the structure of the final dataset.
+
+```{r}
+str(final)
+```
+
+# 4. Initial Exploratory Data Analysis
+
+------------------------------------------------------------------------
+
+## 4.1 Descriptive Statistics
+
+Before proceeding with data visualisation, it is essential to be able to navigate the dataset of 55,574 observations and 32 variables with ease. This segment will help users identify or navigate through the dataset observations instead of scrolling through each observation one-by-one. The interactive datatable is created using DT package.
+
+::: {.callout-note icon="false"}
+### Design Features - Interactive Data Table
+
+-   Display number of observations by selecting the dropdown (5, 10, 25, 50, 100 entries). This ensure that the observations will not span across the entire webpage.
+
+-   View other pages of observations with "previous" or "next" button.
+
+-   Search specific observations with the search bar for the occurrence of a string/ numerical value in any column of an observation
+
+-   Filter observations with the filter bar directly below column headers.
+
+-   Column visibility allows user to select the columns that they are interested to view and hide the rest.
+:::
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code"
+
+DT::datatable(
+  final, 
+  class = "compact",
+  filter = "top", 
+  extensions = c("Buttons"),
+  options = list(
+    pageLength = 5,
+    columnDefs = list(
+      list(targets = c(1:7, 9, 11:23, 26:32), className = "dt-center"), 
+      list(targets = c(8, 10, 24, 25), visible = FALSE)),
+    buttons = list(
+      list(extend = c("colvis"), columns = c(1:30))),
+    dom = "Bpiltf"),
+  caption = "Table 1: Armed Conflicts in Myanmar (2010-2023)"
+)
+```
+
+## 4.2 Trend Distribution of Armed Conflicts and Fatalities
+
+### Density Ridge Plot
+
+Ridgeline plot (aka Joyplot) is a data visualisation technique used to show the distribution of a numeric value for several groups. Distribution can be represented using histograms or density plots, all aligned to the same horizontal scale and presented with a slight overlap.
+
+#### Default
+
+```{r}
+#| fig-width: 10
+#| fig-height: 40
+years <- c(2010:2023)
+  
+dens <- final %>%
+  group_by(event_date, year) %>%
+  filter(year %in% years) %>%
+  mutate(total_fata = sum(fatalities),
+         total_inci = n())
+
+ggplot(dens,
+       aes(x = total_fata, 
+           y = reorder(admin1, desc(admin1)))) +
+  geom_density_ridges(
+    scale = 3,
+    rel_min_height = 0.01,
+    bandwidth = 3.4,
+    color = "white",
+    fill = "#b19a9a"
+  ) +
+  scale_x_continuous(
+    name = "Fatalities",
+    expand = c(0, 0)
+    ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  facet_grid(year ~ ., scales = "free_y") +
+  theme_ridges()
+```
+
+#### Probability Lines
+
+```{r}
+#| fig-width: 10
+#| fig-height: 18
+years <- c(2010:2023)
+  
+dens <- final %>%
+  group_by(event_date, year) %>%
+  filter(year %in% years) %>%
+  mutate(total_fata = sum(fatalities),
+         total_inci = n())
+
+ggplot(dens,
+       aes(x = total_fata, 
+           y = reorder(admin1, desc(admin1)), 
+           fill = factor(stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = c(0.015, 0.985)
+    ) +
+  scale_fill_manual(
+    name = "Probability",
+    values = c("#FF0000A0", "#A0A0A0A0", "#0000FFA0"),
+    labels = c("(0, 0.015]", "(0.015, 0.985]", "(0.985, 1]")
+  ) +
+  scale_x_continuous(
+    name = "Fatalities",
+    expand = c(0, 0)
+    ) +
+  facet_grid(year ~ ., scales = "free_y") +
+  theme_ridges()
+```
+
+#### Quantile Lines
+
+```{r}
+#| fig-width: 10
+#| fig-height: 18
+
+years <- c(2010:2023)
+  
+dens <- final %>%
+  group_by(event_date, year) %>%
+  filter(year %in% years) %>%
+  mutate(total_fata = sum(fatalities),
+         total_inci = n())
+
+ggplot(dens,
+       aes(x = total_fata, 
+           y = reorder(admin1, desc(admin1)), 
+           fill = factor(stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = 4,
+    quantile_lines = TRUE) +
+  scale_fill_viridis_d(name = "Quartiles") +
+  scale_x_continuous(
+    name = "Fatalities",
+    expand = c(0, 0)
+    ) +
+  facet_grid(year ~ ., scales = "free_y") +
+  theme_ridges()
+```
+
+```{r}
+write_rds(final, 
+          "data/final.rds")
+```
+=========================
+
+# Aspatial Analysis (Administrative Level 1)
+
+```{r}
+pacman::p_load(tidyverse, kableExtra, knitr,
+               sf, spdep, tmap, leaflet, leaflet.extras,
+               tm, plotly)
+```
+
+[EPSG:4979](https://epsg.io/4979) is WGS 84 Geographic Coordinate system and [EPSG:4144](https://epsg.io/4144) is Myanmar Projected Coordinate System will be used.
+
+### Convert listing data frame to simple feature dataframe
+
+Use `st_as_sf()` from **sf** package to convert listing data frame into simple feature data frame.
+
+-   `coords` argument requires the columns of x-and-y-coordinates.
+
+-   `crs` argument requires the coordinates system in epsg format.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+data_sf4144 <- st_as_sf(final, 
+                  coords = c("longitude", "latitude"),
+                  crs=4979) %>%
+  st_transform(crs = 4144)
+```
+
+### Verify projection of newly transformed data_sf
+
+Use `st_crs()` to verify the projection of the newly transformed `data_sf`.
+
+The output below shows that the EPSG is indicated as 4144, which is the correct format for Myanmar.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+st_crs(data_sf4144)
+```
+
+Myanmar Level-2 Administrative Boundary (also known as Local Government Area, LGA) polygon features GIS data was downloaded from [geoBoundaries](https://www.geoboundaries.org/countryDownloads.html).
+
+### Read geospatial layers
+
+Use `st_read` to read geospatial layers.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+myan_bound <- st_read(dsn="data",
+               layer="geoBoundaries-MMR-ADM1")
+```
+
+### Check Coordinate Reference System (CRS) of Myanmar boundary
+
+Use `st_crs()` to check the set coordinate system of `myan_bound`.
+
+```{r}
+st_crs(myan_bound)
+```
+
+### Update CRS information
+
+Use `st_transform()` to assign correct EPSG code to dataframe, from one coordinate system to another coordinate system mathematically.
+
+```{r}
+myan_bound4144 <- st_transform(myan_bound, 4144)
+```
+
+Use `st_crs()` again to double-check the set coordinate system of `myan_bound4144` if it has been set correctly.
+
+```{r}
+st_crs(myan_bound4144)
+```
+
+The output above reveals that the EPSG is now set correctly to 4144.
+
+### Join Aspatial data and Geospatial data
+
+Use `st_join()` to do a spatial join to related the polygon IDs to each armed conflict incident by its location. Then use `join = st_intersects()` to identify the points in each LGA.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+joined_data <- st_join(data_sf4144, myan_bound4144, 
+                       join = st_intersects,
+                       left = TRUE)
+```
+
+```{r}
+write_rds(joined_data, 
+          "data/joined_data.rds")
+```
+
+### Derive number of armed conflicts at each administrative region
+
+Use `st_intersect()` to identify armed conflicts located within each sub-national administrative region two.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+
+inci_pts <- myan_bound4144 %>%
+  mutate(total_inci = lengths(
+    st_intersects(myan_bound4144, data_sf4144)
+    ))
+```
+
+### Create new variables
+
+New variables are created at sub-national administrative region two for the years (2010 to 2023).
+
+-   Annual total fatalities
+
+-   Annual total political violence
+
+-   Annual total violence against civilian
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+for (year in 2010:2023) {
+  # Filter data_sf4144 for the current year
+  data_sf4144_year <- data_sf4144[data_sf4144$year == year, ]
+  
+  # Perform spatial join
+  joined_data <- st_join(inci_pts, data_sf4144_year)
+  
+  ##############
+  # Summarise total fatalities at each adm1 level in myan_bound4144
+  # Replace NA with 0 for polygons with no fatalities
+  total_fata_col <- paste0('c_total_fata_', year)
+  inci_pts[[total_fata_col]] <- tapply(joined_data$fatalities, joined_data$shapeID, sum)
+  inci_pts[[total_fata_col]][is.na(inci_pts[[total_fata_col]])] <- 0
+  
+  
+  ##############  
+  # Summarise total political violence rate at each adm1 level in myan_bound4144
+  # Replace NA with 0 for polygons with no incidents
+  
+  total_political_col <- paste0('c_total_political_', year)
+  inci_pts[[total_political_col]] <- tapply(joined_data$political_count, joined_data$shapeID, sum)
+  inci_pts[[total_political_col]][is.na(inci_pts[[total_political_col]])] <- 0
+  
+  ############## 
+  # Summarise by event_type at each adm1 level in myan_bound4144
+  event_types <- unique(data_sf4144$event_type)
+  for (event_type in event_types) {
+    event_count_col <- paste0('c_', event_type, '_', year)
+    inci_pts[[event_count_col]] <- tapply(joined_data$event_type == event_type, joined_data$shapeID, sum)
+    inci_pts[[event_count_col]][is.na(inci_pts[[event_count_col]])] <- 0
+  }
+}
+```
+
+### Filter dataset
+
+The code chunk below to compute density area of total armed conflict incidents and total fatalities at each "second sub-national administrative region" level, and filter the selected variables for subsequent geospatial analysis.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+mapping_rates <- inci_pts %>%
+  select(shapeName, shapeID, shapeType, geometry, 
+         starts_with("c_"))
+```
+
+```{r}
+write_rds(mapping_rates, 
+          "data/mapping_rates.rds")
+```
+
+
+=========================
+# Aspatial Analysis (Administrative Level 2)
+
+### Read geospatial layers
+
+Use `st_read` to read geospatial layers.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+myan_bound_adm2 <- st_read(dsn="data",
+               layer="geoBoundaries-MMR-ADM2")
+```
+
+### Check Coordinate Reference System (CRS) of Myanmar boundary
+
+Use `st_crs()` to check the set coordinate system of `myan_bound`.
+
+```{r}
+st_crs(myan_bound_adm2)
+```
+
+### Update CRS information
+
+Use `st_transform()` to assign correct EPSG code to dataframe, from one coordinate system to another coordinate system mathematically.
+
+```{r}
+myan_bound4144_2 <- st_transform(myan_bound_adm2, 4144)
+```
+
+Use `st_crs()` again to double-check the set coordinate system of `myan_bound4144` if it has been set correctly.
+
+```{r}
+st_crs(myan_bound4144_2)
+```
+
+The output above reveals that the EPSG is now set correctly to 4144.
+
+### Join Aspatial data and Geospatial data
+
+Use `st_join()` to do a spatial join to related the polygon IDs to each armed conflict incident by its location. Then use `join = st_intersects()` to identify the points in each LGA.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+joined_data2 <- st_join(data_sf4144, myan_bound4144_2, 
+                       join = st_intersects,
+                       left = TRUE)
+```
+
+```{r}
+write_rds(joined_data2, 
+          "data/joined_data2.rds")
+```
+
+### Derive number of armed conflicts at each administrative region
+
+Use `st_intersect()` to identify armed conflicts located within each sub-national administrative region two.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+
+inci_pts2 <- myan_bound4144_2 %>%
+  mutate(total_inci = lengths(
+    st_intersects(myan_bound4144_2, data_sf4144)
+    ))
+```
+
+### Create new variables
+
+New variables are created at sub-national administrative region two for the years (2010 to 2023).
+
+-   Annual total fatalities
+
+-   Annual total political violence
+
+-   Annual total violence against civilian
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+for (year in 2010:2023) {
+  # Filter data_sf4144 for the current year
+  data_sf4144_year <- data_sf4144[data_sf4144$year == year, ]
+  
+  # Perform spatial join
+  joined_data2 <- st_join(inci_pts, data_sf4144_year)
+  
+  ##############
+  # Summarise total fatalities at each adm2 level in myan_bound4144
+  # Replace NA with 0 for polygons with no fatalities
+  total_fata_col <- paste0('c_total_fata_', year)
+  inci_pts2[[total_fata_col]] <- tapply(joined_data2$fatalities, joined_data$shapeID, sum)
+  inci_pts2[[total_fata_col]][is.na(inci_pts2[[total_fata_col]])] <- 0
+  
+  
+  ##############  
+  # Summarise total political violence rate at each adm2 level in myan_bound4144
+  # Replace NA with 0 for polygons with no incidents
+  
+  total_political_col <- paste0('c_total_political_', year)
+  inci_pts2[[total_political_col]] <- tapply(joined_data2$political_count, joined_data$shapeID, sum)
+  inci_pts2[[total_political_col]][is.na(inci_pts2[[total_political_col]])] <- 0
+  
+  ############## 
+  # Summarise by event_type at each adm2 level in myan_bound4144
+  event_types <- unique(data_sf4144$event_type)
+  for (event_type in event_types) {
+    event_count_col <- paste0('c_', event_type, '_', year)
+    inci_pts2[[event_count_col]] <- tapply(joined_data2$event_type == event_type, joined_data$shapeID, sum)
+    inci_pts2[[event_count_col]][is.na(inci_pts2[[event_count_col]])] <- 0
+  }
+}
+```
+
+### Filter dataset
+
+The code chunk below to compute density area of total armed conflict incidents and total fatalities at each "second sub-national administrative region" level, and filter the selected variables for subsequent geospatial analysis.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+mapping_rates2 <- inci_pts %>%
+  select(shapeName, shapeID, shapeType, geometry, 
+         starts_with("c_"))
+```
+
+```{r}
+write_rds(mapping_rates2, 
+          "data/mapping_rates2.rds")
+```
+
+## Boxmap
+
+### Create boxbreak function
+
+The code chunk below is a `boxmap` function that creates break points for a box map.
+
+-   arguments:
+
+    -   *v*: vector with observations
+
+    -   *mult:* multiplier for IQR (default 1.5)
+
+-   returns:
+
+    -   *bb:* vector with 7 break points compute quartile and fences
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+boxbreaks <- function(v,mult=1.5) {
+  qv <- unname(quantile(v))
+  iqr <- qv[4] - qv[2]
+  upfence <- qv[4] + mult * iqr
+  lofence <- qv[2] - mult * iqr
+  # initialize break points vector
+  bb <- vector(mode="numeric",length=7)
+  # logic for lower and upper fences
+  if (lofence < qv[1]) {  # no lower outliers
+    bb[1] <- lofence
+    bb[2] <- floor(qv[1])
+  } else {
+    bb[2] <- lofence
+    bb[1] <- qv[1]
+  }
+  if (upfence > qv[5]) { # no upper outliers
+    bb[7] <- upfence
+    bb[6] <- ceiling(qv[5])
+  } else {
+    bb[6] <- upfence
+    bb[7] <- qv[5]
+  }
+  bb[3:5] <- qv[2:4]
+  return(bb)
+}
+```
+
+### **Create get.var function**
+
+The code chunk below is an `get.var` function to extract a variable as a vector out of an sf data frame.
+
+-   arguments:
+
+    -   *vname*: variable name (as character, in quotes)
+
+    -   *df*: name of sf data frame
+
+-   returns:
+
+    -   *v*: vector with values (without a column name)
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+get.var <- function(vname,df) {
+  v <- df[vname] %>% st_set_geometry(NULL)
+  v <- unname(v[,1])
+  return(v)
+}
+```
+
+### Create boxmap function
+
+The code chunk below is an `boxmap` function to create a box map.
+
+arguments:
+
+-   *vnam:* variable name (as character, in quotes)
+
+-   *df:* simple features polygon layer
+
+-   *legtitle:* legend title
+
+-   *mtitle:* map title
+
+-   *mult:* multiplier for IQR
+
+-   *returns:* a tmap-element (plots a map)
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+boxmap <- function(vnam, df, 
+                   legtitle=NA,
+                   mtitle= paste0("Box Map of ", vnam),
+                   mult=1.5){
+  var <- get.var(vnam,df)
+  bb <- boxbreaks(var)
+  tm_shape(df) +
+    tm_polygons() +
+  tm_shape(df) +
+     tm_fill(vnam,title=legtitle,
+             breaks=bb,
+             palette="Reds",
+          labels = c("lower outlier", 
+                     "< 25%", 
+                     "25% - 50%", 
+                     "50% - 75%",
+                     "> 75%", 
+                     "upper outlier"))  +
+  tm_borders() +
+  tm_layout(main.title = mtitle, 
+            title.position = c("left",
+                               "top"))
+}
+```
+
+### Plot boxmap
+
+The code chunk below uses `boxmap()` to plot boxmap and `tmap_arrange()` to arrange small multiple maps in grid layout. Extreme outliers and different quartiles are encoded in different colour intensity, within Myanmar's geographical area.
+
+```{r}
+#| code-fold: true 
+#| code-summary: "Show code" 
+box_inci <- boxmap("c_total_fata_2010", mapping_rates)
+
+box_fata <- boxmap("c_total_political_2010", mapping_rates)
+
+tmap_arrange(box_fata, box_inci, asp=1, ncol=2)
+```
+
+## Other classification types
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+
+pv10 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2010",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2010",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv11 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2011",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2011",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv12 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2012",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2012",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv13 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2013",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2013",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv14 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2014",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2014",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv15 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2015",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2015",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv16 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2016",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2016",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv17 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2017",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2017",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv18 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2018",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2018",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv19 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2019",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2019",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv20 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2020",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2020",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv21 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2021",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2021",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv22 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2022",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2022",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+
+pv23 <- tm_shape(mapping_rates) +
+  tm_fill("c_total_political_2023",
+          n = 6,
+          style = "kmeans",
+          palette = "Reds",
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Spatial Distribution of Political Violence \nin Myanmar (kmeans Classification)",
+            title = "2023",
+            main.title.size = 0.55,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+tmap_arrange(pv10, pv11, pv12, pv13, pv14, pv15, pv16, 
+             pv17, pv18, pv19, pv20, pv21, pv22, pv23, 
+             asp = 1,
+             ncol=7, nrow=2)
+```
+
+## Histogram
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+
+red <- "#9A3E41"
+
+h10 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2010)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2010") +
+  theme_classic()
+
+
+h11 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2011)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2011") +
+  theme_classic()
+
+
+h12 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2012)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2012") +
+  theme_classic()
+
+
+h13 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2013)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2013") +
+  theme_classic()
+
+
+h14 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2014)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2014") +
+  theme_classic()
+
+
+h15 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2015)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2015") +
+  theme_classic()
+
+
+h16 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2016)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2016") +
+  theme_classic()
+
+
+h17 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2017)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2017") +
+  theme_classic()
+
+
+h18 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2018)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2018") +
+  theme_classic()
+
+
+h19 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2019)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2019") +
+  theme_classic()
+
+
+h20 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2020)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2020") +
+  theme_classic()
+
+
+h21 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2021)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2021") +
+  theme_classic()
+
+
+h22 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2022)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2022") +
+  theme_classic()
+
+
+h23 <- ggplot(data=mapping_rates, 
+       aes(x= c_total_political_2023)) +
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill= red) +
+  ggtitle("Distribution of political violence in 2023") +
+  theme_classic()
+```
+
+```{r}
+ggarrange(h10, h11, h12, h13, h14, h15, h16, 
+          h17, h18, h19, h20, h21, h22, h23, 
+          ncol = 7, 
+          nrow = 2)
+```

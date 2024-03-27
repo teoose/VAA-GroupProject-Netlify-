@@ -1,0 +1,282 @@
+---
+title: "Geospatial Analysis2 - Emerging Hot Spot Analysis"
+date: "17 March 2024"
+date-modified: "last-modified"
+author: "Imran Ibrahim"
+toc: true
+execute: 
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+---
+
+# Overview
+
+In this page, I will be exploring the codes for the plots in our Geospatial Analysis module of our Shiny Application. Specifically, I will be plotting the **Emerging Hot Spot Map**.
+
+# Emerging Hot Spot Analysis: sfdep methods
+
+Emerging Hot Spot Analysis (EHSA) is a spatio-temporal analysis method for revealing and describing how hot spot and cold spot areas evolve over time.
+
+The analysis consist of four main steps:
+
+-   Building a space-time cube,
+
+-   Calculating Getis-Ord local Gi\* statistic for each bin by using an FDR correction,
+
+-   Evaluating these hot and cold spot trends by using Mann-Kendall trend test,
+
+-   Categorising each study area location by referring to the resultant trend z-score and p-value for each location with data, and with the hot spot z-score and p-value for each bin.
+
+# Loading R Packages and Data Prep
+
+```{r}
+pacman::p_load(tidyverse, dplyr , 
+               sf, lubridate,plotly,
+               tmap, spdep, sfdep)
+```
+
+Shapes files for Myanmar admin2 levels
+
+```{r}
+mmr_shp_mimu_2 <-  st_read(dsn = "data/geospatial3",  
+                  layer = "mmr_polbnda_adm2_250k_mimu")
+```
+
+## Data Wrangle for quarterly data
+
+As per project requirements, we will sync the time frame for this analysis to be the same as our previous LISA analysis. Therefore, we will set up the data set to be for 2021-2023, and in quarterly periods
+
+I won't repeat the data prep steps again, as this has already been done in previous prototype page. I will read in the previously prepared quarterly data for 2021-2023 instead.
+
+```{r}
+Events_2 <- read_csv("data/df1_complete.csv")
+```
+
+Since this data set has been filled up for missing values, using `tidyr::complete()` , I can proceed to use the standard spacetime constructor ie [`spacetime()`](https://sfdep.josiahparry.com/reference/spacetime.html)
+
+# Creating a Time Series Cube
+
+In the code chunk below, [`spacetime()`](https://sfdep.josiahparry.com/reference/spacetime.html) of sfdep is used to create an spatio-temporal cube.
+
+First, loc_col identifier needs to be the same name for both data and shape file.
+
+```{r}
+Events_2 <- Events_2 %>%
+        filter(event_type == "Battles") %>%
+        rename(DT=admin2) %>%
+        select(-event_type, -year, -Fatalities) 
+          
+```
+
+```{r}
+Quarterly_spt <- spacetime(Events_2, mmr_shp_mimu_2,
+                      .loc_col = "DT",
+                      .time_col = "quarter")
+```
+
+```{r}
+is_spacetime_cube(Quarterly_spt)
+```
+
+# Computing Gi\*
+
+Next, we will compute the local Gi\* statistics.
+
+### Deriving the spatial weights
+
+The code below will be used to identify neighbors and to derive an inverse distance weights.
+
+```{r}
+Quarterly_nb <- Quarterly_spt %>%
+  activate("geometry") %>%
+  mutate(nb = include_self(st_contiguity(geometry)),
+         wt = st_inverse_distance(nb, geometry,
+                                  scale = 1,
+                                  alpha = 1),
+         .before = 1) %>%
+  set_nbs("nb") %>%
+  set_wts("wt")
+```
+
+::: callout-note
+## Note
+
+-   `activate()` of dplyr package is used to activate the geometry context
+
+-   `mutate()` of dplyr package is used to create two new columns *nb* and *wt*.
+
+-   Then we will activate the data context again and copy over the nb and wt columns to each time-slice using `set_nbs()` and `set_wts()`
+
+    -   row order is very important so do not rearrange the observations after using `set_nbs()` or `set_wts()`.
+:::
+
+Note that the data sets now have neighbors and weights for each time-slice.
+
+```{r}
+head(Quarterly_nb)
+```
+
+## Computing Gi\*
+
+We can use these new columns to manually calculate the local Gi\* for each location. We can do this by grouping by *year* and using `local_gstar_perm()` of sfdep package. After which, we `use unnest()` to unnest *gi_star* column of the newly created *gi_starts* data.frame.
+
+```{r}
+#for Quarterly admin 2
+gi_stars3 <- Quarterly_nb %>% 
+  group_by(quarter) %>% 
+  mutate(gi_star = local_gstar_perm(
+    Incidents, nb, wt)) %>% 
+  tidyr::unnest(gi_star)
+```
+
+```{r}
+gi_stars3
+```
+
+# Mann-Kendall Test
+
+With these Gi\* measures we can then evaluate each location for a trend using the Mann-Kendall test.
+
+The code chunk below uses Hinthada region.
+
+```{r}
+cbg3 <- gi_stars3 %>% 
+  ungroup() %>% 
+  filter(DT == "Hinthada") |> 
+  select(DT, quarter, gi_star)
+```
+
+Next, we plot the result by using ggplotly() of plotly package.
+
+**Hinthada district quarterly**
+
+```{r}
+p3 <- ggplot(data = cbg3, 
+       aes(x = quarter, 
+           y = gi_star)) +
+  geom_line() +
+  theme_light()
+
+ggplotly(p3)
+```
+
+Mann Kendall test for **Hinthada district-quarterly**
+
+```{r}
+cbg3 %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>% 
+  tidyr::unnest_wider(mk)
+```
+
+Values of Mann Kendall test.
+
+|        |                         |
+|--------|-------------------------|
+| `tau`  | Kendall's tau statistic |
+| `sl`   | two-sided p-value       |
+| `S`    | Kendall Score           |
+| `D`    | denominator, tau=S/D    |
+| `varS` | variance of S           |
+
+We can replicate this for each location by using `group_by()` of dplyr package.
+
+**Admin 2 districts-quarterly**
+
+```{r}
+ehsa3 <- gi_stars3 %>%
+  group_by(DT) %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>%
+  tidyr::unnest_wider(mk)
+```
+
+```{r}
+ehsa3
+```
+
+## Arrange to show significant emerging hot/cold spots
+
+Admin 2 districts-quarterly
+
+```{r}
+emerging3 <- ehsa3 %>% 
+  arrange(sl, abs(tau)) %>% 
+  slice(1:5)
+
+emerging3
+```
+
+## Performing Emerging Hotspot Analysis
+
+Lastly, we will perform EHSA analysis by using [`emerging_hotspot_analysis()`](https://sfdep.josiahparry.com/reference/emerging_hotspot_analysis.html) of sfdep package. It takes a spacetime object x (i.e quarterly_spt), and the quoted name of the variable of interest (i.e. Incidents) for .var argument.
+
+The **k argument is used to specify the** **number of time lags** which is set to 1 by default.
+
+Lastly, **nsim map** **numbers of simulation** to be performed.
+
+```{r}
+ehsa3 <- emerging_hotspot_analysis(
+  x = Quarterly_spt, 
+  .var = "Incidents", 
+  k = 1, 
+  nsim = 99
+)
+```
+
+### Visualising the distribution of EHSA classes
+
+In the code chunk below, ggplot2 functions is used to reveal the distribution of EHSA classes as a bar chart.
+
+**Admin2 districts - quarterly**
+
+```{r}
+
+#| fig-width: 12
+#| fig-height: 7
+#| column: body-outset-right
+
+ggplot(data = ehsa3,
+       aes(x = classification)) +
+  geom_bar()
+```
+
+### Visualising EHSA
+
+In this section, we will visualise the geographic distribution EHSA classes. However, before we can do so, we need to join *(mmr_shp_mimu2 & ehsa3)* together by using the code chunk below.
+
+```{r}
+mmr3_ehsa <- mmr_shp_mimu_2 %>%
+  left_join(ehsa3,
+            by = join_by(DT == location))
+```
+
+Next, tmap functions will be used to plot a categorical choropleth map by using the code chunk below.
+
+```{r}
+
+#| fig-width: 10
+#| fig-height: 7
+#| column: body-outset-right
+
+ehsa_sig3 <- mmr3_ehsa  %>%
+  filter(p_value < 0.05)
+
+tmap_mode("plot")
+
+tm_shape(mmr3_ehsa) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(ehsa_sig3) +
+  tm_fill("classification") + 
+  tm_borders(alpha = 0.4)
+```
+
+## References
+
+Main reference: Kam, T.S. (2024). [Emerging Hot Spot Analysis: sfdep methods](https://is415-gaa-tskam.netlify.app/in-class_ex/in-class_ex05/in-class_ex05-ehsa)

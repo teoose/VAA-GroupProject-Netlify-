@@ -25,7 +25,15 @@ website:
           href: "ProjectProposal/ProjectProposal(revised).html"
       - text: "Prototype"
         menu: 
-        - text: "Project Meeting Records"
+        - text: "Aspatial Analysis"
+          href: "Prototype/Aspatial Analysis/AspatialAnalysis.html"
+        - text: "Geospatial Analysis - 1"
+          href: "Prototype/Geospatial Analysis/GeospatialAnalysis1.html"
+        - text: "Geospatial Analysis - 2"
+          href: "Prototype/Geospatial Analysis/GeospatialAnalysis2.html"
+        - text: "Confirmatory Analysis"
+          href: "Prototype/Confirmatory Analysis/ConfirmatoryAnalysis.html"
+        - text: "Meeting Records"
           href: "Prototype/MeetingMinutes/ProjectMeeting.html"
     
   page-footer:
