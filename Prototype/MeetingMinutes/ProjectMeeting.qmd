@@ -36,3 +36,15 @@ execute:
 [**Click here to view meeting minutes - 2**](https://decoding-chaos.netlify.app/Prototype/MeetingMinutes/Meeting2.html)**.**
 
 ------------------------------------------------------------------------
+
+**Project Meeting 3:** Project Netlify, R Shiny dashboard modules, Data preparation
+
+**Date:** 23/03/2024
+
+**Time:** 10.30am – 12pm
+
+**In Attendance:** Imran Bin Mohd Ibrahim, Teo Suan Ern, Wong Ngai Munn Zachary Mark
+
+[**Click here to view meeting minutes - 3**](https://decoding-chaos.netlify.app/Prototype/MeetingMinutes/Meeting3.html)**.**
+
+------------------------------------------------------------------------
