@@ -14,7 +14,7 @@ website:
       - text: "Home"
         href: "index.html"
       - text: "Shiny App"
-        href: ".html"
+        href: "https://group5vaa.shinyapps.io/Decoding-Chaos/"
       - text: "User Guide"
         href: "RShiny/UserGuide.pdf"
       - text: "Project Proposal"
