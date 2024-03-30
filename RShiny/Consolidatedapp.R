@@ -1,3 +1,8 @@
+# https://group5vaa.shinyapps.io/Decoding-Chaos/
+# https://group5vaa.shinyapps.io/Aspatial/
+# https://group5vaa.shinyapps.io/Geospatial/
+# https://group5vaa.shinyapps.io/Confirmatory/
+
 # load R packages
 pacman::p_load(shiny, shinydashboard, shinycssloaders, 
                tidyverse, dplyr, leaflet, leaflet.extras, plotly, 
