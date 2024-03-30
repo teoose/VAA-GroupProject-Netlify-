@@ -16,7 +16,7 @@ website:
       - text: "Shiny App"
         href: ".html"
       - text: "User Guide"
-        href: "UserGuide/UserGuide.html"
+        href: "RShiny/UserGuide.pdf"
       - text: "Project Proposal"
         menu:
         - text: "Project Proposal"
