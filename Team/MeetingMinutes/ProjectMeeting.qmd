@@ -37,7 +37,7 @@ execute:
 
 ------------------------------------------------------------------------
 
-**Project Meeting 3:** Project Netlify, R Shiny dashboard modules, Data preparation
+**Project Meeting 3:** Project Netlify, R Shiny dashboard modules, User guide
 
 **Date:** 23/03/2024
 
