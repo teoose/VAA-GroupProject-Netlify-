@@ -1,0 +1,109 @@
+---
+date: "24 March 2024"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+  editor: visual
+---
+
+# ISSS608 Group 5 Meeting Minutes
+
+**Project Meeting 3:** Project Netlify, R Shiny dashboard modules, User guide
+
+**Date:** 23/03/2024
+
+**Time:** 10.30am – 12pm
+
+**In Attendance:** Imran Bin Mohd Ibrahim, Teo Suan Ern, Wong Ngai Munn Zachary Mark
+
+------------------------------------------------------------------------
+
+## Agenda Items
+
+1.  Discussion on Netlify pages
+2.  Updates on R Shiny dashboard modules
+3.  Discussion on user guide
+4.  Any Other Matters/ Follow-up Action
+
+------------------------------------------------------------------------
+
+## Agenda Item 1: Discussion on Netlify pages
+
+### Review on Prototype pages
+
+All team members are refining the respective modules based on Prof Kam’s feedback for Take-home Exercise 4, Suan Ern mentioned that she would assist to consolidate respective modules prepared by each team members once they are done with it.
+
+### Review on main page
+
+Imran suggested to keep the main page simple, and team should only consider incorporating more element if time permits, as the focus should be on R Shiny.
+
+------------------------------------------------------------------------
+
+## Agenda Item 2: Updates on R Shiny dashboard modules
+
+During the group discussion, the team recalled the project consultation with Professor Kam on 18 March 2024.
+
+### **Focus of project and Clarification on R Shiny modules**
+
+*Professor Kam clarified that given the topic of interest for the team is to provide visualisation of armed conflict space, greater emphasis should be placed in the spatial space aspect. He shared that it is important to have parameters that not just show the different variable selection but also allow parameter selections for users to alter the UI model.*
+
+*Professor Kam also suggested the team to consider renaming/ regroup the main tabs (modules), given that the project would involve a variation of maps serving different purposes. It is essential to separate the maps that based on aspatial and geospatial (measure of data aggregation).*
+
+The team also shared with one another on Prof Kam’s feedback on their respective Take-home Exercise 4 and have tentatively renamed the respective modules as aspatial analysis, geospatial analysis and confirmatory analysis.
+
+Suan Ern highlighted that there might be a need to rearrange certain plots/ charts, and renamed the tabs accordingly, so that the overall final project will have a greater flow of information/ allow analysis for users when finalising the project for submission.
+
+### Discussion on Shiny Modules
+
+#### 2 - 1: Discussion on Aspatial Analysis
+
+Suan Ern shared that she has tried to plot the density ridge plot (based on admin1 and event_type) following from the project consultation with Prof Kam and his advice. She added that at quarto-level she managed to plot the different plots that revealed the different density variation. However, she highlighted the issue that when she transferred the plots and incorporated parameter options at R Shiny, as the plots were very different. Imran suspected that it might be due to the parameter options. Suan Ern clarified that she is using year range slider as one of the parameters and might have resulted in accumulated values instead. She added that she has also tried to incorporate histogram charts for the choropleth (spatial distribution) maps.
+
+*Feedback from Prof Kam (on Suan Ern’s Take-home Exercise 4): To explore incorporating bivariate map, and hierarchical and spatially constrained cluster analysis (i.e. it would fall under geospatial analysis) if time permits.*
+
+#### 2 - 2: Discussion on Geospatial Analysis
+
+Imran updated that he has incorporated Prof Kam’s feedback from the project consultation and email (on Take-home Exercise 4). He highlighted an issue that he faced was at local level (R Shiny), he was able to render the maps successfully, but certain maps were not rendered successfully upon publishing on R Shiny website. Imran then went through the “Clustering & Outlier Analysis” and “Emerging Hot Spot Analysis” tabs with the team.
+
+Suan Ern suggested to incorporate/ combine the “Gi\* trend and Mann Kendall test” sub-tab with “emerging hotspot map” sub-tab, as she recalled during the project consultation with Prof Kam that he might be looking at having a single view with different plots/ maps for users to navigate based on the global parameter options.
+
+Zachary added that for the bar chart, the team can consider removing the x-axis labels given that there is interactivity element for users to hover over. Suan Ern shared the team can consider having a checkbox feature to display the bar chart upon user’s selection as it could also possibly reduce scrolling of page by user.
+
+*Feedback from Prof Kam (on Imran’s Take-home Exercise 4): To incorporate more parameters and change the R packages used.*
+
+#### 2 - 3: Discussion on Confirmatory Analysis
+
+Zachary updated that he has attempted to plot an alternative version of mosaic plot using geom_mosaic function instead of the package (vcd – strucplot framework) suggested by Prof Kam, as he was facing some issues with vcd package. He added that he has also attempted to plot the funnel plot by following one of Prof’s hands-on exercises. However, he highlighted that the plot did not seem right as the plot did not give a funnel-like distribution of incident/ fatality points.
+
+Imran shared that he has helped to incorporate Zachary’s quarto codes into R Shiny project, and briefly explained on the parameter options available for one-way anova test and mosaic plot. Suan Ern suggested that in addition to showcasing event_type variable for one-way anova test, other variables such as admin1 could be considered as a user selection option. She further added that for the parameters for mosaic plot, the team can consider incorporating variable adjustment to both x-axis and y-axis, as the current parameter is only by year.
+
+Imran acknowledged Suan Ern’s point that it is good to have more parameters, however, he pointed out there are only two categorical variables in the ACLED dataset that is mainly used by the team. Suan Ern suggested that an alternative way would be to allow selection of sub_event_type and admin2 as well. Given the larger number of categories (i.e. more than 15) of the two variables, Suan Ern added that it might be good to restrict (limit) the number of selections of the categories within those two variables.
+
+*Feedback from Prof Kam (on Zachary’s Take-home Exercise 4): To replace ggbarstats with mosaic plot, dotplot with boxplot if showing distribution.*
+
+------------------------------------------------------------------------
+
+## Agenda Item 3: Discussion on User-guide
+
+The team decided to take reference from sample projects (such as “Tanzania Tourism Analysis”) shared by Prof Kam to prepare the project user guides. The team agreed to having standardised layout as follows:
+
+-          A brief description to explain each sub-tab (and on the chart) -- at the top panel.
+
+-          Main content (i.e. a screenshot of the R Shiny module) which would made up majority closed to 75% -- at the bottom-left panel.
+
+-          Step-by-step explanation on how to use the UI which would made up about 25% -- at the bottom-right panel.
+
+## Agenda Item 4: Any Other Matters/ Follow-up Action
+
+With no other matters, the meeting ended at 12:15pm.
+
+**Follow-up Actions:**
+
+-   Suan Ern will prepare the draft minutes of meeting and update the team for inputs.
+-   The team agreed to follow up on the outstanding items by:
+    -   29 March 2024: Finalise respective prototype (quarto), user guide and poster content
+    -   30 March 2024: Finalise poster and Netlify website

@@ -30,8 +30,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -61,44 +59,12 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-sample-listings .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-sample-listings'] = new List('listing-sample-listings', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="homepage.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -116,29 +82,21 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" rel="" target="" aria-current="page">
- <span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./.html" rel="" target="">
- <span class="menu-text">Shiny App</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./RShiny/UserGuide.pdf" rel="" target="">
- <span class="menu-text">User Guide</span></a>
+    <a class="nav-link" href="./Poster/Poster.html" rel="" target="">
+ <span class="menu-text">Overview</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-project-proposal" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Project Proposal</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-shiny-app" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Shiny App</span>
     </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-project-proposal">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-shiny-app">    
         <li>
-    <a class="dropdown-item" href="./ProjectProposal/ProjectProposal.html" rel="" target="">
- <span class="dropdown-text">Project Proposal</span></a>
+    <a class="dropdown-item" href="https://group5vaa.shinyapps.io/Decoding-Chaos/" rel="" target="">
+ <span class="dropdown-text">Shiny App</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./ProjectProposal/ProjectProposal(revised).html" rel="" target="">
- <span class="dropdown-text">Project Proposal (revised)</span></a>
+    <a class="dropdown-item" href="./RShiny/UserGuide.pdf" rel="" target="">
+ <span class="dropdown-text">User Guide</span></a>
   </li>  
     </ul>
   </li>
@@ -163,9 +121,24 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="./Prototype/Confirmatory Analysis/ConfirmatoryAnalysis.html" rel="" target="">
  <span class="dropdown-text">Confirmatory Analysis</span></a>
   </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-team" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Team</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-team">    
         <li>
-    <a class="dropdown-item" href="./Prototype/MeetingMinutes/ProjectMeeting.html" rel="" target="">
+    <a class="dropdown-item" href="./Team/ProjectProposal/ProjectProposal(list).html" rel="" target="">
+ <span class="dropdown-text">Project Proposal</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Team/MeetingMinutes/ProjectMeeting.html" rel="" target="">
  <span class="dropdown-text">Meeting Records</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Team/Team.html" rel="" target="">
+ <span class="dropdown-text">Acknowledgement</span></a>
   </li>  
     </ul>
   </li>
@@ -180,41 +153,23 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(0)</span></div></div></div>
+    
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 
-<div id="hero-banner" class="column-screen page-columns page-full">
-<div class="grid column-page">
-<div class="headline g-col-lg-6 g-col-12 g-col-md-12">
-<div class="h1">
-<p>Working in progress</p>
-</div>
-<div class="h2">
-
-</div>
-
-<p><br></p>
-<p><br></p>
-</div>
-<div class="g-col-lg-6 g-col-12 g-col-md-12">
-
-</div>
-</div>
-</div>
-<div id="listing-sample-listings" class="quarto-listing quarto-listing-container-grid">
-<div class="list grid quarto-listing-cols-3">
-
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div>
-<pre><code></code></pre>
-
+<style>
+  body {
+  background-image: url("images/index.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+  
+</style>
+<!-- ::: column-screen -->
+<!-- ![](images/index.png) -->
+<!-- ::: -->
 
 
 

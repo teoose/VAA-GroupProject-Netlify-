@@ -1254,9 +1254,10 @@ cof <- colorFactor(c("#ff7e8a", "#394938", "#ffa500",
 incident_pts <- final %>%
   filter(fatalities > 0)
 
-psmap <- leaflet(incident_pts, options = leafletOptions(minZoom = 6, maxZoom = 8)) %>% 
+psmap <- leaflet(incident_pts, options = leafletOptions(minZoom = 4, maxZoom = 8)) %>% 
+  addPolygons(data = myan_bound_adm2, color = "lightgrey", weight = 1, fillOpacity = 0.5) %>%
       addTiles('https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png') %>%
-      setView(94, 21, zoom = 6) %>%
+      setView(94, 21, zoom = 4) %>%
       addCircleMarkers(lat= ~latitude, lng = ~longitude, radius = ~(fatalities)^(1/2),
                        color = ~cof(event_type), weight = 1, fillOpacity = 0.1,
                        popup = paste( "<strong>", incident_pts$event_date, "</strong>", 

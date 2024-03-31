@@ -8,6 +8,7 @@ toc-location: body
 execute: 
   eval: true
   echo: true
+  freeze: true
   warning: false
 editor: visual
 code-overflow: wrap
@@ -96,7 +97,16 @@ The following subsets of the Dataset is created for the various CDA sections in 
 
 ```{r}
 Summary_Data <- ACLED_MMR %>%
-    group_by(year, admin1, event_type) %>%
+    group_by(year, event_type) %>%
+    summarise(Total_incidents = n(),
+              Total_Fatalities = sum(fatalities, na.rm=TRUE)) %>%
+    
+    ungroup()
+```
+
+```{r}
+Summary_Data_Region <- ACLED_MMR %>%
+    group_by(admin1, event_type) %>%
     summarise(Total_incidents = n(),
               Total_Fatalities = sum(fatalities, na.rm=TRUE)) %>%
     
@@ -129,25 +139,28 @@ Region_Summary <- ACLED_MMR %>%
 
 The following code below shows the distribution of incidents according to event type across 2010 to 2023.
 
+::: callout-note
+Hover on the bars to see details.
+:::
+
 ```{r}
 #| fig-width: 14
 #| fig-height: 20
+
+Summary_Data$tooltip <- c(paste0(     
+  " Year = ", Summary_Data$year,         
+  "\n Total Fatalities = ", Summary_Data$Total_incidents))
 
 gg1 <- ggplot(Summary_Data,
        aes(x = year,
            y = Total_incidents,
            fill = event_type)) +
-  geom_col_interactive(aes(tooltip = year,
+  geom_col_interactive(aes(tooltip = Summary_Data$tooltip,
                            data_id = year),
                        alpha = 0.5) +
-  geom_text(aes(label = Total_incidents), 
-            vjust = 0.4, 
-            color = "black",
-            size = 2,
-            check_overlap = TRUE,
-            position = "dodge") +
   facet_wrap(~event_type, 
-             ncol =2) +
+             ncol =2,
+             scales = "free") +
   theme_minimal() +
   labs(y = "Total Number of Incidents", x = "Years") +
   theme(
@@ -173,26 +186,30 @@ From the chart above, it can be seen that there was a spike in incidents from 20
 
 The code below shows the distribution of the fatalities from 2010 to 2023 according to the event type.
 
+::: callout-note
+Hover on the bars to see details.
+:::
+
 ```{r}
 #| fig-width: 14
 #| fig-height: 20
 
 
+
+Summary_Data$tooltip <- c(paste0(     
+  " Year = ", Summary_Data$year,         
+  "\n Total Fatalities = ", Summary_Data$Total_Fatalities)) 
+
 gg2 <- ggplot(Summary_Data,
        aes(x = year,
            y = Total_Fatalities,
            fill = event_type)) +
-  geom_col_interactive(aes(tooltip = year,
+  geom_col_interactive(aes(tooltip = Summary_Data$tooltip,
                            data_id = year),
                        alpha = 0.5) +
-  geom_text(aes(label = Total_incidents), 
-            vjust = 0.5, 
-            color = "black",
-            size = 2,
-            check_overlap = TRUE,
-            position = "dodge") +
   facet_wrap(~event_type,
-             ncol =2) +
+             ncol =2,
+             scales = "free") +
   theme_minimal() +
   labs(y = "Total Number of Fatalities", x = "Years") +
   theme(
@@ -218,26 +235,29 @@ From the chart above, there was an increase fatalities from battles, explosions/
 
 The code below shows the distribution of incidents according to each individual region within Myanmar. When you hover on each bar, it would highlight the region within each event type.
 
+::: callout-note
+Hover on the bars to see details.
+:::
+
 ```{r}
 #| fig-width: 14
 #| fig-height: 20
 
 
-gg3 <- ggplot(Region_Summary,
+Summary_Data_Region$tooltip <- c(paste0(     
+  " Region = ", Summary_Data_Region$admin1,         
+  "\n Total Fatalities = ", Summary_Data_Region$Total_incidents))
+
+gg3 <- ggplot(Summary_Data_Region,
        aes(x = admin1,
            y = Total_incidents,
            fill = event_type)) +
-  geom_col_interactive(aes(tooltip = admin1,
-                           data_id = admin1),
+  geom_col_interactive(aes(tooltip = Summary_Data_Region$tooltip,
+                           data_id = Total_incidents),
                        alpha = 0.5) +
-  geom_text(aes(label = Total_incidents), 
-            vjust = 0.5, 
-            color = "black",
-            size = 2,
-            check_overlap = TRUE,
-            position = "dodge") +
   facet_wrap(~event_type,
-             ncol =2) +
+             ncol =2,
+             scales = "free") +
   theme_minimal() +
   labs(y = "Total Number of Incidents", x = "Regions") +
   theme(
@@ -263,22 +283,27 @@ From the chart above, it can be seen that Sagaing has the most incidents across 
 
 The code below shows the distribution of fatalities according to each individual region within Myanmar. When you hover on each bar, it would highlight the region within each event type.
 
+::: callout-note
+Hover on the bars to see details.
+:::
+
 ```{r}
-gg4 <- ggplot(Region_Summary,
+
+Summary_Data_Region$tooltip <- c(paste0(     
+  " Region = ", Summary_Data_Region$admin1,         
+  "\n Total Fatalities = ", Summary_Data_Region$Total_Fatalities))
+
+
+gg4 <- ggplot(Summary_Data_Region,
        aes(x = admin1,
            y = Total_Fatalities,
            fill = event_type)) +
-  geom_col_interactive(aes(tooltip = admin1,
+  geom_col_interactive(aes(tooltip = Summary_Data_Region$tooltip,
                            data_id = admin1),
                        alpha = 0.5) +
-  geom_text(aes(label = Total_Fatalities), 
-            vjust = 0.5, 
-            color = "black",
-            size = 2,
-            check_overlap = TRUE,
-            position = "dodge") +
   facet_wrap(~event_type,
-             ncol =2) +
+             ncol =2,
+             scales = "free") +
   theme_minimal() +
   labs(y = "Total Number of Fatalities", x = "Regions") +
   theme(
@@ -300,17 +325,22 @@ girafe(
 From the chart above, the number of fatalities in battle seem to be correlated with the number of incidents. But it seems that it may not be the case for explosions/remote violence as shown for the region of Sagaing where there are a higher amount of explosions/remote violence however the fatalities are a lot lower.
 :::
 
-## 5. Anova Testing: Event Types & Fatatilites
+## 5. One-Way Anova Testing: Event Types & Fatatilites
 
-The following code chunk below is used for Anova Testing of the types of events against the number of fatalities grouped by regions.
+The following code chunk below is used for Anova Testing of the types of events against the number of fatalities.
 
 ```{r}
-#| fig-width: 14
-#| fig-height: 25
-grouped_ggbetweenstats(ACLED_MMR, 
+ACLED_ANOVA_Filtered <- ACLED_MMR %>%
+  filter(year == 2022)
+```
+
+```{r}
+
+
+
+ggbetweenstats(ACLED_ANOVA_Filtered, 
               x = event_type, 
               y = fatalities,
-              grouping.var = admin1,
               type = "np",
               pairwise.display = "s",
               pairwise_comparisons = TRUE,
@@ -337,7 +367,8 @@ vcd::mosaic(~ admin1 + event_type + Has_Fatalities, gp=shading_Friendly, data = 
                                                  "left", 
                                                  "center", 
                                                  "right")
-                                 ))
+                                 ),
+            margins = c(10,10,4,10))
 ```
 
 ## 2022
@@ -355,7 +386,8 @@ vcd::mosaic(~ admin1 + event_type + Has_Fatalities, gp=shading_Friendly, data = 
                                                  "left", 
                                                  "center", 
                                                  "right")
-                                 ))
+                                 ),margins = c(10,10,4,10)
+            )
 ```
 
 ## 2023
@@ -373,7 +405,9 @@ vcd::mosaic(~ admin1 + event_type + Has_Fatalities, gp=shading_Friendly, data = 
                                                  "left", 
                                                  "center", 
                                                  "right")
-                                 ))
+                                 ),
+            margins = c(10,10,4,10)
+            )
 ```
 :::
 
@@ -417,7 +451,8 @@ vcd::mosaic(~ admin1 + sub_event_type + Has_Fatalities, gp=shading_Friendly, dat
                                                  "left", 
                                                  "center", 
                                                  "right")
-)
+),
+margins = c(10,10,4,10)
 )
 ```
 
@@ -438,15 +473,18 @@ vcd::mosaic(~ admin1 + sub_event_type + Has_Fatalities, gp=shading_Friendly, dat
                                                  "left", 
                                                  "center", 
                                                  "right")
-)
+),
+margins = c(10,10,4,10)
 )
 ```
 
 ## 2023
 
 ```{r}
-#| fig-width: 14
+#| fig-width: 20
 #| fig-height: 15
+
+
 
 
 ACLED_MMR_Mosaic_Filtered <- ACLED_MMR_Mosaic %>%
@@ -459,8 +497,11 @@ vcd::mosaic(~ admin1 + sub_event_type + Has_Fatalities, gp=shading_Friendly, dat
                                                  "left", 
                                                  "center", 
                                                  "right")
+),
+
+margins = c(10,10,4,10)
 )
-)
+
 ```
 :::
 

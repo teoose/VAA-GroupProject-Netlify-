@@ -1,0 +1,26 @@
+---
+title: "ISSS608 Group 5 Project Proposal"
+execute: 
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+  editor: visual
+---
+
+The team went through several rounds of iteration and came up with two project proposals, to refine to the current Decoding Chaos - R Shiny application that provides a web-enabled interactive visual analytics application using R Shiny.
+
+------------------------------------------------------------------------
+
+**Project Proposal (Initial)** Decoding Chaos - Global Terrorism using Global Terrorism Database from University of Maryland
+
+[**Click here to view Project Proposal (Initial) - 1**](https://decoding-chaos.netlify.app/Team/ProjectProposal/ProjectProposal.html)**.**
+
+------------------------------------------------------------------------
+
+**Project Proposal (Revised)** Decoding Chaos - Armed Conflict Incidents in Myanmar using Armed Conflict Location & Event Data Project (ACLED)
+
+[**Click here to view Project Proposal (Revised) - 2**](https://decoding-chaos.netlify.app/Team/ProjectProposal/ProjectProposal(revised).html)**.**
+
+------------------------------------------------------------------------

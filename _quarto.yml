@@ -11,18 +11,16 @@ website:
     search: true
     
     right:
-      - text: "Home"
-        href: "index.html"
+      - text: "Overview"
+        href: "Poster/Poster.html"
+        
       - text: "Shiny App"
-        href: "https://group5vaa.shinyapps.io/Decoding-Chaos/"
-      - text: "User Guide"
-        href: "RShiny/UserGuide.pdf"
-      - text: "Project Proposal"
         menu:
-        - text: "Project Proposal"
-          href: "ProjectProposal/ProjectProposal.html"
-        - text: "Project Proposal (revised)"
-          href: "ProjectProposal/ProjectProposal(revised).html"
+        - text: "Shiny App"
+          href: "https://group5vaa.shinyapps.io/Decoding-Chaos/"
+        - text: "User Guide"
+          href: "RShiny/UserGuide.pdf"
+
       - text: "Prototype"
         menu: 
         - text: "Aspatial Analysis"
@@ -33,8 +31,15 @@ website:
           href: "Prototype/Geospatial Analysis/GeospatialAnalysis2.html"
         - text: "Confirmatory Analysis"
           href: "Prototype/Confirmatory Analysis/ConfirmatoryAnalysis.html"
+      
+      - text: "Team"
+        menu:
+        - text: "Project Proposal"
+          href: "Team/ProjectProposal/ProjectProposal(list).html"
         - text: "Meeting Records"
-          href: "Prototype/MeetingMinutes/ProjectMeeting.html"
+          href: "Team/MeetingMinutes/ProjectMeeting.html"
+        - text: "Acknowledgement"
+          href: "Team/Team.html"
     
   page-footer:
     right: 

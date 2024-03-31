@@ -1,0 +1,23 @@
+---
+title: "Acknowledgement"
+execute: 
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+  editor: visual
+---
+
+The team consists of three postgraduate students from Singapore Management University (SMU), Master of IT in Business (MITB), Financial Technology & Analytics track. We would like to thank our mentor Prof Dr. Kam for the valuable advice and unwavering support throughout the course of this project.
+
+```{mermaid}
+%%| echo: false
+flowchart TD
+  A(Mentor Prof Dr. Kam)
+  A --> B(Decoding Chaos)
+  B --> C(Imran Bin Mohd Ibrahim)
+  B --> D(Teo Suan Ern)
+  B --> E(Wong Ngai Munn Zachary Mark)
+```
+

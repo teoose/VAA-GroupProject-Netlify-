@@ -1,0 +1,177 @@
+---
+title: "Decoding Chaos"
+subtitle: "Our Project Proposal (Revised)"
+date: "10 March 2024"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+  editor: visual
+---
+
+*Note: This is a revised proposal from initial project proposal to incorporate Professor Kam's advice and suggestions to adopt ACLED dataset.*
+
+Authors: Imran, Suan Ern, Zachary Wong
+
+# Motivation
+
+### "In contrast to the 1970s, much of today's political violence is aimed at people instead of property." - [Reuters (2023)](https://www.reuters.com/investigates/special-report/usa-politics-violence/)
+
+Armed conflicts due to political violence and coordinated attacks targeting innocent civilians, have been on the rise globally. According to [International Crisis Group](https://www.crisisgroup.org/global/10-conflicts-watch-2024), there was a fresh wave of major combats in the recent years whereby one of the conflict (which was close to our nation - Singapore) was prompted by Myanmar army's 2021 power grab. The International Crisis Group has listed Myanmar (one of the countries in South-East Asia) as the top 10 conflicts to watch in 2024. This threatens the public at both physical and psychological levels, and raised concerns among the Defence and Security sectors on the urgency to develop effective counter terrorism measures and strategies.
+
+The team aims to use open-source data from armed conflict events (Armed Conflict Location & Event Data Project (ACLED)) to provide easy-to-use and insightful visualisation tools that can be especially suitable to help (1) discover armed conflicts trends and (2) conceptualise armed conflict spaces.
+
+# Objectives
+
+The objective of this project is to:
+
+1.  Examine open-source data on armed conflict incidents (Armed Conflict Location & Event Data Project (ACLED)) and derive useful insights on the factors and conditions that may affect armed conflict incidents,
+
+2.  Conceptualise armed conflict spaces in Myanmar, and
+
+3.  Build a web-enabled interactive visual analytics application by using R Shiny based on the dataset.
+
+# Data
+
+The project will examine the dataset from [Armed Conflict Location & Event Data Project (ACLED)](https://acleddata.com/data-export-tool/), specifically Myanmar country, between Year 2010 and Year 2023. The dataset consists of 55,574 observations and 35 variables. Each row details the armed conflict event on the type, agents, location, date and other characteristics of conflict events (such as political violence, demonstration) in Myanmar.
+
+The flowchart diagram below provides an overview of the key variables used in this project.
+
+```{mermaid}
+%%| echo: false
+flowchart TD
+  A(Key Variables Used \n event_id_cnty)
+  A --> B(Time Period)
+  A --> C(Characteristic of Incident)
+  A --> D(Location)
+  
+  B --> E(year)
+  B --> F(date)
+  B -.-> G(New Variables)
+  G -.-> H(day)
+  G -.-> I(week number)
+  G -.-> J(month)
+
+
+  C --> K(event_type)
+  C --> L(sub_event_type)
+  C --> M(actor1)
+  C --> N(actor2)
+  C --> O(fatalities)
+  C -.-> P(New Variables)
+  P -.-> Q(total incidents)
+  P -.-> R(total fatalities)
+  P -.-> S(political violence rate)
+  P -.-> T(violence against civilian rate)
+  
+  D --> U(country)
+  D --> V(longitude)
+  D --> W(latitude)
+  D --> X(admin1)
+  D --> Y(admin2)
+  D --> Z(admin3)
+  D -.-> AA(New Variables)
+  AA -.-> AB(geometry points)
+  AA -.-> AC(shapeID)
+```
+
+# Methodology & Analytical Approach
+
+For this project, the following approach will be taken by the team:
+
+1.  **Data Preparation:** Clean the dataset by removing irrelevant variables and filtering variables.
+
+2.  **Exploratory Data Analysis:** Analyse the dataset to understand the distribution of variables, and identify patterns between variables.
+
+    a.  Distribution Analysis
+
+    b.  Trend Analysis
+
+    c.  Text Analysis
+
+    d.  Network Analysis
+
+3.  **Geospatial Data Analysis:** Analyse the dataset to conceptualise armed conflict spaces within Myanmar.
+
+    a.  Spatial Statistical Distribution
+
+    b.  Spatial Point Distribution
+
+    c.  Spatial Distribution
+
+    d.  Clustering & Outlier Analysis
+
+    e.  Hot & Cold Zone Analysis
+
+4.  **Confirmatory Data Analysis via Statistical Methods:** Analyse the dataset using statistical testing tools to test hypotheses, evaluate the findings and arguments and make statistical observations under uncertainty.
+
+    a.  Association test
+
+    b.  Oneway ANOVA Test
+
+# Prototype
+
+The team has decided to split the main prototype modules as follows:
+
+-   Exploratory Data Analysis (Initial & Geospatial)
+
+-   Clustering & Outlier Analysis
+
+-   Hot & Cold Zone Analysis
+
+-   Confirmatory Data Analysis
+
+The team has conceptualised and developed a prototype to visually display the layouts of the R Shiny Application along with its UI and Server components. Please refer to **Decoding Chaos Prototype tab** for more.
+
+# R Packages
+
+The team intends to use the following R packages to run the R Shiny Application:
+
+-   *tidyverse*: a family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.
+
+-   *knitr*: an report generation tool.
+
+-   *dplyr*: an R tool for working with data frame (e.g. objects).
+
+-   *plotly:* R library for plotting interactive statistical graphs.
+
+-   *DT*: an R interface to the JavaScript library DataTables that create interactive table on html page.
+
+-   *scales*: an scale package used for controlling axis and legend labels.
+
+-   *lubridate*: an R package that facilitates to use of dates and time elements.
+
+-   *wordcloud*: a text mining package and word cloud generator.
+
+-   *tidytext*: an R package that provides functions and supports seamless conversions of text to and from tidy formats of datasets.
+
+-   *tm*: an R package that provides text mining applications.
+
+-   *ggforce*: an extension of ggplot2 to provide visual data analysis with newer stats and geoms.
+
+-   *ggraph*: build network graph visualisation using appropriate functions
+
+-   *igraph*: an interface for analysis of graphs or networks.
+
+-   *highcharter*: a wrapper that contains 'highcharts' library for plotting of R objects.
+
+-   *sf*: an R package that supports the importing, managing, and processing of geospatial data.
+
+-   *spdep*: an R package that supports the handling of geospatial data.
+
+-   *tm*: an R package that provides text mining applications.
+
+-   *tmap*: an R package that provides layer-based creation of thematic maps.
+
+-   *leaflet*: an R package that allows the creation and customisation of interactive maps.
+
+-   *ggstatsplot*: an extension of ggplot2 package for statistical visualisation and graphics creation.
+
+-   *ggdist*: an R package that support visualisation of distribution and uncertainty.
+
+-   *performance*: an R package used for assessment, comparison and testing of statistical models.
+
+-   *parameters*: an R package used for processing parameters of various statistical models.
