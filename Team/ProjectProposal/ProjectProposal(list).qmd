@@ -9,7 +9,7 @@ execute:
   editor: visual
 ---
 
-The team went through several rounds of iteration and came up with two project proposals, to refine to the current Decoding Chaos - R Shiny application that provides a web-enabled interactive visual analytics application using R Shiny.
+The team went through several rounds of iteration to reach our final (revised) proposal. This process allowed the team to refine to the current Decoding Chaos - R Shiny application that provides a web-enabled interactive visual analytics application using R Shiny.
 
 ------------------------------------------------------------------------
 
