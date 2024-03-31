@@ -49,8 +49,6 @@ pacman::p_load(tidyverse, kableExtra, knitr,
 -   *plotly*: an R package for creating interactive charts.
 
 -   *tm*: an R package that provides text mining applications.
-
--   *ggforce*: an extension of ggplot2 to provide visual data analysis with newer stats and geoms.
 :::
 
 ## 2.2 Import Data
