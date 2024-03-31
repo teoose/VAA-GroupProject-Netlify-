@@ -92,3 +92,5 @@ With no other matters, the meeting ended at 12:15pm.
 **Follow-up Actions:**
 
 -   The team agreed to perform EDA on the Global Terrorism Dataset for the next meeting to discuss in more details on the dataset.
+
+[Return to Project Meeting Listing](https://decoding-chaos.netlify.app/team/meetingminutes/projectmeeting)

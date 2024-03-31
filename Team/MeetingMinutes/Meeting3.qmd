@@ -107,3 +107,5 @@ With no other matters, the meeting ended at 12:15pm.
 -   The team agreed to follow up on the outstanding items by:
     -   29 March 2024: Finalise respective prototype (quarto), user guide and poster content
     -   30 March 2024: Finalise poster and Netlify website
+
+[Return to Project Meeting Listing](https://decoding-chaos.netlify.app/team/meetingminutes/projectmeeting)

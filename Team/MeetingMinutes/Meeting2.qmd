@@ -193,3 +193,5 @@ With no other matters, the meeting ended at 12:15pm.
         -   Revise project proposal (with ACLED dataset)
 
         -   Combine team members Quarto documents as Prototype page in Netlify.
+
+[Return to Project Meeting Listing](https://decoding-chaos.netlify.app/team/meetingminutes/projectmeeting)
