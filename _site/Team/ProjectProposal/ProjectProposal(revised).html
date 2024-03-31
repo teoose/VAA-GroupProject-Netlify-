@@ -126,6 +126,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="../../Prototype/Confirmatory Analysis/ConfirmatoryAnalysis.html" rel="" target="">
  <span class="dropdown-text">Confirmatory Analysis</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Prototype/Storyboard/Storyboard.html" rel="" target="">
+ <span class="dropdown-text">Storyboard</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -134,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-team">    
         <li>
-    <a class="dropdown-item" href="../../Team/ProjectProposal(list).html" rel="" target="">
+    <a class="dropdown-item" href="../../Team/ProjectProposal/ProjectProposal(list).html" rel="" target="">
  <span class="dropdown-text">Project Proposal</span></a>
   </li>  
         <li>
@@ -183,7 +187,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 16, 2024</p>
+      <p class="date-modified">March 31, 2024</p>
     </div>
   </div>
     
@@ -227,32 +231,22 @@ ul.task-list li input[type="checkbox"] {
   
   B --&gt; E(year)
   B --&gt; F(date)
-  B -.-&gt; G(New Variables)
-  G -.-&gt; H(day)
-  G -.-&gt; I(week number)
-  G -.-&gt; J(month)
 
-
-  C --&gt; K(event_type)
-  C --&gt; L(sub_event_type)
-  C --&gt; M(actor1)
-  C --&gt; N(actor2)
-  C --&gt; O(fatalities)
-  C -.-&gt; P(New Variables)
-  P -.-&gt; Q(total incidents)
-  P -.-&gt; R(total fatalities)
-  P -.-&gt; S(political violence rate)
-  P -.-&gt; T(violence against civilian rate)
+  C --&gt; G(event_type)
+  C --&gt; H(sub_event_type)
+  C --&gt; J(fatalities)
+  C -.-&gt; K(New Variables)
+  K -.-&gt; L(total incidents)
+  K -.-&gt; M(total fatalities)
   
-  D --&gt; U(country)
-  D --&gt; V(longitude)
-  D --&gt; W(latitude)
-  D --&gt; X(admin1)
-  D --&gt; Y(admin2)
-  D --&gt; Z(admin3)
-  D -.-&gt; AA(New Variables)
-  AA -.-&gt; AB(geometry points)
-  AA -.-&gt; AC(shapeID)
+  D --&gt; N(country)
+  D --&gt; O(longitude)
+  D --&gt; P(latitude)
+  D --&gt; Q(admin1)
+  D --&gt; R(admin2)
+  D -.-&gt; S(New Variables)
+  S -.-&gt; T(geometry points)
+  S -.-&gt; U(shapeID)
 </pre>
 </div>
 </div>
@@ -264,25 +258,20 @@ ul.task-list li input[type="checkbox"] {
 <p>For this project, the following approach will be taken by the team:</p>
 <ol type="1">
 <li><p><strong>Data Preparation:</strong> Clean the dataset by removing irrelevant variables and filtering variables.</p></li>
-<li><p><strong>Exploratory Data Analysis:</strong> Analyse the dataset to understand the distribution of variables, and identify patterns between variables.</p>
+<li><p><strong>Aspatial Analysis:</strong> Analyse the dataset to understand the aspatial distribution of variables, and identify patterns between variables at different Administration Region Levels.</p>
 <ol type="a">
-<li><p>Distribution Analysis</p></li>
-<li><p>Trend Analysis</p></li>
-<li><p>Text Analysis</p></li>
-<li><p>Network Analysis</p></li>
+<li>Distribution Analysis (proportional symbol map, choropleth map, line chart, density-ridge plot)</li>
 </ol></li>
 <li><p><strong>Geospatial Data Analysis:</strong> Analyse the dataset to conceptualise armed conflict spaces within Myanmar.</p>
 <ol type="a">
-<li><p>Spatial Statistical Distribution</p></li>
-<li><p>Spatial Point Distribution</p></li>
-<li><p>Spatial Distribution</p></li>
 <li><p>Clustering &amp; Outlier Analysis</p></li>
 <li><p>Hot &amp; Cold Zone Analysis</p></li>
+<li><p>Emerging hotspot analysis</p></li>
 </ol></li>
 <li><p><strong>Confirmatory Data Analysis via Statistical Methods:</strong> Analyse the dataset using statistical testing tools to test hypotheses, evaluate the findings and arguments and make statistical observations under uncertainty.</p>
 <ol type="a">
-<li><p>Association test</p></li>
 <li><p>Oneway ANOVA Test</p></li>
+<li><p>Visualising Categorical Data (vcd)</p></li>
 </ol></li>
 </ol>
 </section>
@@ -290,12 +279,16 @@ ul.task-list li input[type="checkbox"] {
 <h1>Prototype</h1>
 <p>The team has decided to split the main prototype modules as follows:</p>
 <ul>
-<li><p>Exploratory Data Analysis (Initial &amp; Geospatial)</p></li>
-<li><p>Clustering &amp; Outlier Analysis</p></li>
-<li><p>Hot &amp; Cold Zone Analysis</p></li>
-<li><p>Confirmatory Data Analysis</p></li>
+<li><p><a href="https://decoding-chaos.netlify.app/prototype/aspatial%20analysis/aspatialanalysis" target="_blank">Aspatial Analysis</a></p></li>
+<li><p>Geospatial Analysis (<a href="https://decoding-chaos.netlify.app/prototype/geospatial%20analysis/geospatialanalysis1" target="_blank">Part 1</a> &amp; <a href="https://decoding-chaos.netlify.app/prototype/geospatial%20analysis/geospatialanalysis2" target="_blank">Part 2</a>)</p></li>
+<li><p><a href="https://decoding-chaos.netlify.app/prototype/confirmatory%20analysis/confirmatoryanalysis" target="_blank">Confirmatory Data Analysis</a></p></li>
 </ul>
-<p>The team has conceptualised and developed a prototype to visually display the layouts of the R Shiny Application along with its UI and Server components. Please refer to <strong>Decoding Chaos Prototype tab</strong> for more.</p>
+<p>Please refer to <strong>Prototype Tab</strong> (or respective modules) for more.</p>
+</section>
+<section id="storyboard" class="level1">
+<h1>Storyboard</h1>
+<p>The team has conceptualised and developed a prototype to visually display the layouts of the R Shiny Application along with its UI and Server components.</p>
+<p>Please refer to <strong>Storyboard page</strong> for more.</p>
 </section>
 <section id="r-packages" class="level1">
 <h1>R Packages</h1>
@@ -306,24 +299,15 @@ ul.task-list li input[type="checkbox"] {
 <li><p><em>dplyr</em>: an R tool for working with data frame (e.g.&nbsp;objects).</p></li>
 <li><p><em>plotly:</em> R library for plotting interactive statistical graphs.</p></li>
 <li><p><em>DT</em>: an R interface to the JavaScript library DataTables that create interactive table on html page.</p></li>
-<li><p><em>scales</em>: an scale package used for controlling axis and legend labels.</p></li>
 <li><p><em>lubridate</em>: an R package that facilitates to use of dates and time elements.</p></li>
-<li><p><em>wordcloud</em>: a text mining package and word cloud generator.</p></li>
-<li><p><em>tidytext</em>: an R package that provides functions and supports seamless conversions of text to and from tidy formats of datasets.</p></li>
-<li><p><em>tm</em>: an R package that provides text mining applications.</p></li>
 <li><p><em>ggforce</em>: an extension of ggplot2 to provide visual data analysis with newer stats and geoms.</p></li>
-<li><p><em>ggraph</em>: build network graph visualisation using appropriate functions</p></li>
-<li><p><em>igraph</em>: an interface for analysis of graphs or networks.</p></li>
 <li><p><em>highcharter</em>: a wrapper that contains ‘highcharts’ library for plotting of R objects.</p></li>
 <li><p><em>sf</em>: an R package that supports the importing, managing, and processing of geospatial data.</p></li>
 <li><p><em>spdep</em>: an R package that supports the handling of geospatial data.</p></li>
-<li><p><em>tm</em>: an R package that provides text mining applications.</p></li>
 <li><p><em>tmap</em>: an R package that provides layer-based creation of thematic maps.</p></li>
 <li><p><em>leaflet</em>: an R package that allows the creation and customisation of interactive maps.</p></li>
 <li><p><em>ggstatsplot</em>: an extension of ggplot2 package for statistical visualisation and graphics creation.</p></li>
 <li><p><em>ggdist</em>: an R package that support visualisation of distribution and uncertainty.</p></li>
-<li><p><em>performance</em>: an R package used for assessment, comparison and testing of statistical models.</p></li>
-<li><p><em>parameters</em>: an R package used for processing parameters of various statistical models.</p></li>
 </ul>
 
 

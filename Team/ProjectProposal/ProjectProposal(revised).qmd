@@ -50,32 +50,22 @@ flowchart TD
   
   B --> E(year)
   B --> F(date)
-  B -.-> G(New Variables)
-  G -.-> H(day)
-  G -.-> I(week number)
-  G -.-> J(month)
 
-
-  C --> K(event_type)
-  C --> L(sub_event_type)
-  C --> M(actor1)
-  C --> N(actor2)
-  C --> O(fatalities)
-  C -.-> P(New Variables)
-  P -.-> Q(total incidents)
-  P -.-> R(total fatalities)
-  P -.-> S(political violence rate)
-  P -.-> T(violence against civilian rate)
+  C --> G(event_type)
+  C --> H(sub_event_type)
+  C --> J(fatalities)
+  C -.-> K(New Variables)
+  K -.-> L(total incidents)
+  K -.-> M(total fatalities)
   
-  D --> U(country)
-  D --> V(longitude)
-  D --> W(latitude)
-  D --> X(admin1)
-  D --> Y(admin2)
-  D --> Z(admin3)
-  D -.-> AA(New Variables)
-  AA -.-> AB(geometry points)
-  AA -.-> AC(shapeID)
+  D --> N(country)
+  D --> O(longitude)
+  D --> P(latitude)
+  D --> Q(admin1)
+  D --> R(admin2)
+  D -.-> S(New Variables)
+  S -.-> T(geometry points)
+  S -.-> U(shapeID)
 ```
 
 # Methodology & Analytical Approach
@@ -84,47 +74,41 @@ For this project, the following approach will be taken by the team:
 
 1.  **Data Preparation:** Clean the dataset by removing irrelevant variables and filtering variables.
 
-2.  **Exploratory Data Analysis:** Analyse the dataset to understand the distribution of variables, and identify patterns between variables.
+2.  **Aspatial Analysis:** Analyse the dataset to understand the aspatial distribution of variables, and identify patterns between variables at different Administration Region Levels.
 
-    a.  Distribution Analysis
-
-    b.  Trend Analysis
-
-    c.  Text Analysis
-
-    d.  Network Analysis
+    a.  Distribution Analysis (proportional symbol map, choropleth map, line chart, density-ridge plot)
 
 3.  **Geospatial Data Analysis:** Analyse the dataset to conceptualise armed conflict spaces within Myanmar.
 
-    a.  Spatial Statistical Distribution
+    a.  Clustering & Outlier Analysis
 
-    b.  Spatial Point Distribution
+    b.  Hot & Cold Zone Analysis
 
-    c.  Spatial Distribution
-
-    d.  Clustering & Outlier Analysis
-
-    e.  Hot & Cold Zone Analysis
+    c.  Emerging hotspot analysis
 
 4.  **Confirmatory Data Analysis via Statistical Methods:** Analyse the dataset using statistical testing tools to test hypotheses, evaluate the findings and arguments and make statistical observations under uncertainty.
 
-    a.  Association test
+    a.  Oneway ANOVA Test
 
-    b.  Oneway ANOVA Test
+    b.  Visualising Categorical Data (vcd)
 
 # Prototype
 
 The team has decided to split the main prototype modules as follows:
 
--   Exploratory Data Analysis (Initial & Geospatial)
+-   [Aspatial Analysis](https://decoding-chaos.netlify.app/prototype/aspatial%20analysis/aspatialanalysis){target="_blank"}
 
--   Clustering & Outlier Analysis
+-   Geospatial Analysis ([Part 1](https://decoding-chaos.netlify.app/prototype/geospatial%20analysis/geospatialanalysis1){target="_blank"} & [Part 2](https://decoding-chaos.netlify.app/prototype/geospatial%20analysis/geospatialanalysis2){target="_blank"})
 
--   Hot & Cold Zone Analysis
+-   [Confirmatory Data Analysis](https://decoding-chaos.netlify.app/prototype/confirmatory%20analysis/confirmatoryanalysis){target="_blank"}
 
--   Confirmatory Data Analysis
+Please refer to **Prototype Tab** (or respective modules) for more.
 
-The team has conceptualised and developed a prototype to visually display the layouts of the R Shiny Application along with its UI and Server components. Please refer to **Decoding Chaos Prototype tab** for more.
+# Storyboard
+
+The team has conceptualised and developed a prototype to visually display the layouts of the R Shiny Application along with its UI and Server components.
+
+Please refer to **Storyboard page** for more.
 
 # R Packages
 
@@ -140,29 +124,15 @@ The team intends to use the following R packages to run the R Shiny Application:
 
 -   *DT*: an R interface to the JavaScript library DataTables that create interactive table on html page.
 
--   *scales*: an scale package used for controlling axis and legend labels.
-
 -   *lubridate*: an R package that facilitates to use of dates and time elements.
 
--   *wordcloud*: a text mining package and word cloud generator.
-
--   *tidytext*: an R package that provides functions and supports seamless conversions of text to and from tidy formats of datasets.
-
--   *tm*: an R package that provides text mining applications.
-
 -   *ggforce*: an extension of ggplot2 to provide visual data analysis with newer stats and geoms.
-
--   *ggraph*: build network graph visualisation using appropriate functions
-
--   *igraph*: an interface for analysis of graphs or networks.
 
 -   *highcharter*: a wrapper that contains 'highcharts' library for plotting of R objects.
 
 -   *sf*: an R package that supports the importing, managing, and processing of geospatial data.
 
 -   *spdep*: an R package that supports the handling of geospatial data.
-
--   *tm*: an R package that provides text mining applications.
 
 -   *tmap*: an R package that provides layer-based creation of thematic maps.
 
@@ -171,7 +141,3 @@ The team intends to use the following R packages to run the R Shiny Application:
 -   *ggstatsplot*: an extension of ggplot2 package for statistical visualisation and graphics creation.
 
 -   *ggdist*: an R package that support visualisation of distribution and uncertainty.
-
--   *performance*: an R package used for assessment, comparison and testing of statistical models.
-
--   *parameters*: an R package used for processing parameters of various statistical models.

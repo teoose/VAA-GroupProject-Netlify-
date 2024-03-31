@@ -31,6 +31,8 @@ website:
           href: "Prototype/Geospatial Analysis/GeospatialAnalysis2.html"
         - text: "Confirmatory Analysis"
           href: "Prototype/Confirmatory Analysis/ConfirmatoryAnalysis.html"
+        - text: "Storyboard"
+          href: "Prototype/Storyboard/Storyboard.html"
       
       - text: "Team"
         menu:

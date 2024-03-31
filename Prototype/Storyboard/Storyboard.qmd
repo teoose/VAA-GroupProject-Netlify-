@@ -1,0 +1,530 @@
+---
+title: "Our Storyboard"
+execute: 
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+  editor: visual
+---
+
+# 1. Storyboard
+
+Storyboard aims to visually maps out user's experience. It is a tool for making strong visual connection between the insights uncovered based on research and user's interaction with the R Shiny dashboard application. The interactive components and UI design aims to facilitate data (and geospatial) exploration and analysis for users to develop effective counter measures and strategies.
+
+The prototype can be broadly classify into three key areas:
+
+-   Aspatial Analysis
+
+-   Geospatial Analysis
+
+-   Confirmatory Analysis
+
+And the team has conceptualised the proposed layouts and UI features as follows:
+
+For enhanced user experience, the prototype included 'filter' components (i.e. parameter selections) and 'chart interpretation' boxes, and have aligned them mainly to the left side of the web pages. The 'chart interpretation' box provides brief explanation of how each chart can be interpreted.
+
+## Section One - Aspatial Analysis
+
+### Aspatial Analysis - Overview
+
+This tab serves as the "landing page" that displays the map of Myanmar and its spatial points of armed conflicts over the years (i.e. 2010 to 2023). Figure below shows the UI interactive features in the **Overview** sub-tab.
+
+![Aspatial Analysis - Overview - Part 1](images/Aspatial1_Overview1.JPG)
+
+![Aspatial Analysis - Overview - Part 2](images/Aspatial1_Overview2.JPG)
+
+Code chunk below shows the simplified version of UI and Server components in R Shiny application for **Overview** sub-tab.
+
+```{r}
+#| eval: false
+#| code-fold: true 
+#| code-summary: "Show code" 
+# UI Components
+AspatialOverviewrow1 <-  fluidRow(
+  highchartOutput(), # display line chart
+  sliderInput(), # select year range
+  selectizeInput(), # select event (allows multiple selection)
+  radioButtons(), # select administrative region level
+  selectizeInput(), # select administrative region (allows multiple selection)
+  actionButton(), # action button
+  checkboxInput(), # conditional panel (option to display line chart)
+  highchartOutput(), # display line chart
+  checkboxInput(), # conditional panel (option to display map information)
+  leafletOutput(), # display point spatial map
+)
+
+AspatialOverviewrow2 <-  fluidRow(
+  DT::dataTableOutput() # display datatable
+)
+
+# Server Components
+output1-1-1 <- renderLeaflet({}) # point spatial map
+output1-1-2 <- renderLeHighchart({}) # line chart
+output1-1-3 <- DT::renderDataTable({}) # datatable
+```
+
+### Aspatial Analysis - Distribution Analysis
+
+This analysis page allows users to perform data visualisation to show the armed conflict incidents’ (and fatalities) spatial and density distribution represented in choropleth map and density ridge plot respectively. Figure below shows the UI interactive features in the **Distribution Analysis** sub-tab.
+
+![Aspatial Analysis - Distribution Analysis sub-tab](images/Aspatial2_DistributionAnalysis.JPG)
+
+Code chunk below shows the simplified version of UI and Server components in R Shiny application for **Distribution Analysis** sub-tab.
+
+```{r}
+#| eval: false
+#| code-fold: true 
+#| code-summary: "Show code" 
+# UI Components
+AspatialDistributionrow1 <-  fluidRow(
+  sliderInput(), # select year range
+  radioButtons(), # select administrative region level
+  radioButtons(), # select display rates
+  selectInput(), # select colour palette
+  checkboxInput(), # Customise Spatial Map
+  selectInput(), # Spatial Map Classification Type
+  sliderInput(), # Number of Classes
+  checkboxInput(), # Customise Density Ridge Plot
+  selectInput(), # Density Ridge Style
+  tmapOutput(), # choropleth map
+  plotOutput() # density ridge plot
+)
+
+AspatialDistributionrow2 <-  fluidRow(
+  textOutput()
+)
+
+
+# Server Components
+output1-2-1 <- renderTmap() # display choropleth map
+output1-2-2 <- renderPlot() # display density ridge plot
+```
+
+## Section Two - Geospatial Analysis
+
+### Geospatial Analysis - Local Measures of Spatial Autocorrelation
+
+This analysis page allows users to perform a cluster and outlier analysis, to identify significant clusters of high and low values and outliers. Using the Local Moran’s I statistic, features are categorised into 2 clusters (High-High, Low-Low), 2 outliers (High-Low, Low-High) and 1 insignificant classes.
+
+![Geospatial Analysis - Local Measures of Spatial Autocorrelation sub-tab](images/Geospatial1_LocalMeasures.JPG)
+
+Code chunk below shows the simplified version of UI and Server components in R Shiny application for **Local Measures of Spatial Autocorrelation** sub-tab.
+
+```{r}
+#| eval: false
+#| code-fold: true 
+#| code-summary: "Show code" 
+# UI Components
+Cluster2 <- fluidRow(
+  selectInput(), # select period
+  selectInput(), # select Moran Event Type
+  radioButtons(), # select Contiguity method 
+  selectInput(), # select Spatial Weights Style
+  sliderInput(), # Number of Simulations
+  actionButton(), # action button 
+  radioButtons(), # select confidence interval 
+  selectInput(), # select Lisa Classification
+  selectInput(), # select Local Moran's Stat
+  plotOutput(), # LocalMoranMap
+  plotOutput(), # LisaMap 
+  textOutput(),
+  DT::dataTableOutput()
+)
+
+# Server Components
+output2-1-1 <- renderPlot()
+output2-1-2 <- renderPlot()
+output2-1-3 <- renderDataTable()
+```
+
+### Geospatial Analysis - Hot & Cold Analysis
+
+This analysis page allows users to perform a Hot & Cold Spot analysis, to identify significant areas of high and low values based on a calculated distance. Using the Getis-Ord Gi\* statistic, features are grouped together when simila High (Hot) or Low (Cold) values are found in a cluster. 
+
+![Geospatial Analysis - Hot & Cold Analysis sub-tab](images/Geospatial2_HotCold.JPG)
+
+Code chunk below shows the simplified version of UI and Server components in R Shiny application for **Hot & Cold Analysis** sub-tab.
+
+```{r}
+#| eval: false
+#| code-fold: true 
+#| code-summary: "Show code" 
+# UI Components
+HotCold1 <- fluidRow(
+  selectInput(), # select period
+  selectInput(), # select Moran Event Type
+  radioButtons(), # select Contiguity method 
+  sliderInput(), # Number of Simulations
+  actionButton(), # action button 
+  radioButtons(), # select confidence interval 
+  selectInput(), # select local Gi stats
+  plotOutput(), # GI Stats
+  plotOutput(), # Sig hot/cold
+  textOutput(),
+  DT::dataTableOutput()
+)
+
+# Server Components
+output2-2-1 <- renderPlot()
+output2-2-2 <- renderPlot()
+output2-2-3 <- renderDataTable()
+```
+
+### Geospatial Analysis - Emerging Hot Spot Analysis
+
+This analysis page allows users to perform an Emerging Hot Spot analysis, to reveal and describe how hot spots and cold spots have changed over time. After identifying temporal trends, features are classified into one of 17 ESRI hot spot classifications.
+
+![Geospatial Analysis - Hot & Cold Analysis sub-tab](images/Geospatial3_EmergingHotspot.JPG)
+
+Code chunk below shows the simplified version of UI and Server components in R Shiny application for **Emerging Hot Spot Analysis** sub-tab.
+
+```{r}
+#| eval: false
+#| code-fold: true 
+#| code-summary: "Show code" 
+# UI Components
+EHSA2 <- fluidRow(
+  selectInput(), # select event type
+  radioButtons(), # select Contiguity Method"
+  sliderInput(), # select Time Lag of spatial neighbours
+  sliderInput(), # Number of Simulations
+  actionButton(),
+  checkboxInput(), # checkbox to show EHSA classes
+  plotlyOutput(), # display EHSA ba chart 
+  checkboxInput(), # checkbox to show GI* trend plot"
+  selectizeInput(), # select district
+  plotlyOutput(), # display Giplot
+  radioButtons(), # select Confidence level
+  plotOutput(), # EHSAmap
+  textOutput(), # EHSAText
+  DT::dataTableOutput(), # data table
+  textOutput()
+) 
+# Server Components
+output2-3-1 <- renderPlot()
+output2-3-2 <- renderPlot()
+output2-3-3 <- renderDataTable()
+```
+
+## Section Three - Confirmatory Analysis
+
+### Confirmatory Analysis - One-Way ANOVA Test
+
+This analysis page allows users to perform a One-Way ANOVA test to identify if there is any significant difference between the mean or median value for event types and the number of fatalities. If the p-value is below the critical value, it means that the null hypothesis has sufficient statistical evidence to support. Whereas if the p-value is above the critical value, the null hypothesis will be rejected due to insufficient statistical evidence.
+
+![Confirmatory Analysis - One-way ANOVA Test sub-tab](images/Confirm1_Anova.JPG)
+
+Code chunk below shows the simplified version of UI and Server components in R Shiny application for **One-way ANOVA Test** sub-tab.
+
+```{r}
+#| eval: false
+#| code-fold: true 
+#| code-summary: "Show code" 
+# UI Components
+Confirm1 <- fluidRow(
+  selectInput(), # select time
+  selectizeInput(), # select event type
+  actionButton(), # reset button
+  selectInput(), # select test type
+  selectInput(), # Pairwise Display
+  selectInput(), # P-value adjustment method 
+  radioButtons(), # select Confidence level
+  plotOutput(), # display Anovaplot
+)
+
+Confirm2 <- fluidRow(
+  textOutput()
+)
+
+# Server Components
+output3-1-1 <- renderPlot()
+```
+
+### Confirmatory Analysis - Visualising Categorical Data
+
+This analysis page allows users to visualise categorical data using mosaic plot to find association between the variables. The size of each tile would represent the proportion of observations for the variable. The colour of each tile would represent the residual where red tiles indicate significant negative residual where frequency is less than expected and blue tiles indicate significant positive residual where frequency is more than expected. The intensity of the colour represents the magnitude of the residuals which is shown on the legend on the right.
+
+![Confirmatory Analysis - Visualising Categorical Data sub-tab](images/Confirm2_vcd.JPG)
+
+Code chunk below shows the simplified version of UI and Server components in R Shiny application for **Visualising Categorical Data** sub-tab.
+
+```{r}
+#| eval: false
+#| code-fold: true 
+#| code-summary: "Show code" 
+# UI Components
+Confirm3 <- fluidRow(
+  selectInput(), # select Year
+  selectizeInput(), # Region
+  selectizeInput(), # Event Type
+  selectInput(), # Include Data with or without Fatalities
+  actionButton(), 
+  plotOutput() # plot Mosaic plot
+)
+
+Confirm4 <- fluidRow(
+  textOutput()
+)
+
+# Server Components
+output3-2-1 <- renderPlot()
+```
+
+# 2. R Shiny Application (simplified code)
+
+The storyboard (in Section 2) facilitates the development of a prototype in R Shiny Application. Iterative prototyping will allow continuous improvement of the final project.
+
+The proposed layouts and UI features
+
+Code chunk below shows the simplified version of R Shiny Application for Decoding Chaos prototype.
+
+```{r}
+#| eval: false
+
+#========================================================== 
+## load R packages
+#========================================================== 
+pacman::p_load(shiny, shinydashboard, shinycssloaders, 
+               tidyverse, dplyr, leaflet, leaflet.extras, plotly, 
+               ggthemes, fresh, sf, sfdep, tmap, tm, 
+               ggraph, DT, spatstat,
+               lubridate,viridis, ggplot2, readr, purrr, ggstatsplot, 
+               vcd, ggmosaic, forcats,
+               ggridges, ggdist, highcharter)
+
+
+#========================================================== 
+## UI Components
+#========================================================== 
+# main header ---
+header <- dashboardHeader(title = "Decoding Chaos")
+
+
+# main sidebar ---
+sidebar <- dashboardSidebar()
+
+sidebarMenu(
+    menuItem("Aspatial", tabName = "Aspatial"),
+    menuItem("Geospatial", tabName = "Geospatial"),
+    menuItem("Confirmatory", tabName = "Confirmatory"),
+    menuItem("Visit ACLED data"))
+
+# main body ---
+body <- dashboardBody(
+  tabItems(
+    tabItem(tabName = "Aspatial",
+            AspatialSubTabs
+    ),
+    tabItem(tabName = "Cluster",
+            ClusterSubTabs 
+    ),
+    tabItem(tabName = "ConfirmatoryAnalysis",
+            ConfirmSubTabs
+)))
+
+# fluidRows ---
+
+# aspatial analysis tab
+AspatialOverviewrow1 <-  fluidRow(
+  highchartOutput(), # display line chart
+  sliderInput(), # select year range
+  selectizeInput(), # select event (allows multiple selection)
+  radioButtons(), # select administrative region level
+  selectizeInput(), # select administrative region (allows multiple selection)
+  actionButton(), # action button
+  checkboxInput(), # conditional panel (option to display line chart)
+  highchartOutput(), # display line chart
+  checkboxInput(), # conditional panel (option to display map information)
+  leafletOutput(), # display point spatial map
+)
+
+AspatialOverviewrow2 <-  fluidRow(
+  DT::dataTableOutput() # display datatable
+)
+
+AspatialDistributionrow1 <-  fluidRow(
+  sliderInput(), # select year range
+  radioButtons(), # select administrative region level
+  radioButtons(), # select display rates
+  selectInput(), # select colour palette
+  checkboxInput(), # Customise Spatial Map
+  selectInput(), # Spatial Map Classification Type
+  sliderInput(), # Number of Classes
+  checkboxInput(), # Customise Density Ridge Plot
+  selectInput(), # Density Ridge Style
+  tmapOutput(), # choropleth map
+  plotOutput() # density ridge plot
+)
+
+AspatialDistributionrow2 <-  fluidRow(
+  textOutput()
+)
+
+# geospatial analysis tab
+Cluster2 <- fluidRow(
+  selectInput(), # select period
+  selectInput(), # select Moran Event Type
+  radioButtons(), # select Contiguity method 
+  selectInput(), # select Spatial Weights Style
+  sliderInput(), # Number of Simulations
+  actionButton(), # action button 
+  radioButtons(), # select confidence interval 
+  selectInput(), # select Lisa Classification
+  selectInput(), # select Local Moran's Stat
+  plotOutput(), # LocalMoranMap
+  plotOutput(), # LisaMap 
+  textOutput(),
+  DT::dataTableOutput()
+)
+
+
+HotCold1 <- fluidRow(
+  selectInput(), # select period
+  selectInput(), # select Moran Event Type
+  radioButtons(), # select Contiguity method 
+  sliderInput(), # Number of Simulations
+  actionButton(), # action button 
+  radioButtons(), # select confidence interval 
+  selectInput(), # select local Gi stats
+  plotOutput(), # GI Stats
+  plotOutput(), # Sig hot/cold
+  textOutput(),
+  DT::dataTableOutput()
+)
+
+EHSA2 <- fluidRow(
+  selectInput(), # select event type
+  radioButtons(), # select Contiguity Method"
+  sliderInput(), # select Time Lag of spatial neighbours
+  sliderInput(), # Number of Simulations
+  actionButton(),
+  checkboxInput(), # checkbox to show EHSA classes
+  plotlyOutput(), # display EHSA ba chart 
+  checkboxInput(), # checkbox to show GI* trend plot"
+  selectizeInput(), # select district
+  plotlyOutput(), # display Giplot
+  radioButtons(), # select Confidence level
+  plotOutput(), # EHSAmap
+  textOutput(), # EHSAText
+  DT::dataTableOutput(), # data table
+  textOutput()
+) 
+
+# confirmatory analysis tab
+Confirm1 <- fluidRow(
+  selectInput(), # select time
+  selectizeInput(), # select event type
+  actionButton(), # reset button
+  selectInput(), # select test type
+  selectInput(), # Pairwise Display
+  selectInput(), # P-value adjustment method 
+  radioButtons(), # select Confidence level
+  plotOutput(), # display Anovaplot
+)
+
+Confirm2 <- fluidRow(
+  textOutput()
+)
+
+
+Confirm3 <- fluidRow(
+  selectInput(), # select Year
+  selectizeInput(), # Region
+  selectizeInput(), # Event Type
+  selectInput(), # Include Data with or without Fatalities
+  actionButton(), 
+  plotOutput() # plot Mosaic plot
+)
+
+Confirm4 <- fluidRow(
+  textOutput()
+)
+
+
+# subtabs
+AspatialSubTabs <- tabsetPanel(
+  tabPanel("Overview", 
+           AspatialOverviewrow1,
+           AspatialOverviewrow2
+  ),
+  tabPanel("Distribution Analysis", 
+           AspatialDistributionrow1,
+           AspatialDistributionrow2
+  )
+)
+
+ClusterSubTabs <- tabsetPanel(
+  
+  tabPanel("Local Measures of Spatial Autocorrelation", 
+           Cluster2),
+  tabPanel("Hot & Cold Spot Analysis(HCSA)", 
+           HotCold1),
+  tabPanel("Emerging Hot Spot Analysis", 
+           EHSA2)
+)
+
+ConfirmSubTabs <- tabsetPanel(
+  tabPanel("One-Way Anova Test", 
+           Confirm1,
+           Confirm2),
+  #tabPanel("Mosaic Plot",
+  #         Confirm2),
+  tabPanel("Mosaic Plot-VCD",
+           Confirm3,
+           Confirm4)
+  #Confirm2)
+  
+)
+
+
+#========================================================== 
+## UI dashboard
+#========================================================== 
+ui <- dashboardPage(title = 'Armed Conflicts in Myanmar (2010 to 2023)', 
+                    header, sidebar, body)  
+
+
+#========================================================== 
+## Server Components
+#========================================================== 
+server <- function(input, output) {
+
+# aspatial analysis tab
+output1-1-1 <- renderLeaflet({}) 
+output1-1-2 <- renderLeHighchart({}) 
+output1-1-3 <- DT::renderDataTable({}) 
+
+output1-2-1 <- renderTmap()
+output1-2-2 <- renderPlot()
+
+# geospatial analysis tab
+output2-1-1 <- renderPlot()
+output2-1-2 <- renderPlot()
+output2-1-3 <- renderDataTable()
+
+output2-2-1 <- renderPlot()
+output2-2-2 <- renderPlot()
+output2-2-3 <- renderDataTable()
+
+output2-3-1 <- renderPlot()
+output2-3-2 <- renderPlot()
+output2-3-3 <- renderDataTable()
+
+# confirmatory analysis tab
+output3-1-1 <- renderPlot()
+output3-2-1 <- renderPlot()
+}
+
+
+#========================================================== 
+## Run Shiny Application
+#========================================================== 
+shinyApp(ui = ui, server = server)
+```
+
+# Reference
+
+-   [R Shiny - COVID-19 tracker](https://shiny.posit.co/r/gallery/life-sciences/covid19-tracker/){target="_blank"}
+-   [R Shiny - NCAA Swimming Team Finder for Incoming College Athletes](https://shiny.posit.co/r/gallery/education/ncaa-swim-team-finder/){target="_blank"}
