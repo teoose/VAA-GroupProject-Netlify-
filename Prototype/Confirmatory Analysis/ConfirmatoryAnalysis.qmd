@@ -1,5 +1,5 @@
 ---
-title: "Armed Conflicts in Myanmar - Prototype"
+title: "Confirmatory Analysis"
 author: "Zachary Wong"
 date: 03.18.2024
 date-modified: "last-modified"
