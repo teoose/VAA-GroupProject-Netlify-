@@ -274,7 +274,7 @@ output3-2-1 <- renderPlot()
 
 # 2. R Shiny Application (simplified code)
 
-The storyboard (in Section 2) facilitates the development of a prototype in R Shiny Application. Iterative prototyping will allow continuous improvement of the final project.
+The storyboard (in Section 1) facilitates the development of a prototype in R Shiny Application. Iterative prototyping will allow continuous improvement of the final project.
 
 The proposed layouts and UI features
 
